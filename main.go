@@ -7,7 +7,7 @@ import (
 
 func main() {
 	r := gin.Default()
-	r.POST("/api-token-auth", views.CreateToken())
+	r.POST("/api-token-auth", views.CreateToken)
 
 	api := r.Group("/api/v1/users")
 	{

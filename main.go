@@ -2,11 +2,12 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"webService_Refactoring/views"
 )
 
 func main() {
 	r := gin.Default()
-	r.POST("/api-token-auth", apiToken)
+	r.POST("/api-token-auth", views.CreateToken())
 
 	api := r.Group("/api/v1/users")
 	{
@@ -33,10 +34,6 @@ func main() {
 
 	}
 	r.Run(":8083")
-}
-
-func apiToken(context *gin.Context) {
-
 }
 
 func userCreate(context *gin.Context) {

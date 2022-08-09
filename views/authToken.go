@@ -1,36 +1,60 @@
-package main
+package views
 
 import (
-	"fmt"
+	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt"
+	"net/http"
 	"time"
 )
 
-func main() {
-	token, _ := GenerateToken("admin", "whosbug2022")
-	fmt.Println("token:", token)
-	claim, _ := ParseToken(token)
-	fmt.Println(claim)
+// Claims 是一些实体（通常指的用户）的状态和额外的元数据
+type Claims struct {
+	username string `json:"username" binding:"required"`
+	password string `json:"password" binding:"required"`
+	jwt.StandardClaims
+}
+
+func CreateToken() gin.HandlerFunc {
+	return func(context *gin.Context) {
+		var claims Claims
+		err := context.ShouldBind(&claims)
+		if err != nil {
+			errs, ok := err.(validator.ValidationErrors)
+			if !ok {
+				context.JSON(http.StatusOK, gin.H{
+					"msg": errs.Error(),
+				})
+			}
+			context.JSON(http.StatusBadRequest, gin.H{
+				"error": errs.Error(),
+			})
+			return
+		}
+		token, err := GenerateToken(claims.username, claims.password)
+		if err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{
+				"err": err.Error(),
+			})
+			return
+		}
+		context.JSON(http.StatusOK, gin.H{
+			"token": token,
+		})
+	}
 }
 
 var jwtSecret = []byte("setting.JwtSecret")
 
-//Claim是一些实体（通常指的用户）的状态和额外的元数据
-type Claims struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-	jwt.StandardClaims
-}
-
-// 根据用户的用户名和密码产生token
+// GenerateToken 根据用户的用户名和密码产生token
 func GenerateToken(username, password string) (string, error) {
 	//设置token有效时间
 	nowTime := time.Now()
 	expireTime := nowTime.Add(3 * time.Hour)
 
 	claims := Claims{
-		Username: username,
-		Password: password,
+		username: username,
+		password: password,
 		StandardClaims: jwt.StandardClaims{
 			// 过期时间
 			ExpiresAt: expireTime.Unix(),
@@ -43,22 +67,4 @@ func GenerateToken(username, password string) (string, error) {
 	//该方法内部生成签名字符串，再用于获取完整、已签名的token
 	token, err := tokenClaims.SignedString(jwtSecret)
 	return token, err
-}
-
-// 根据传入的token值获取到Claims对象信息，（进而获取其中的用户名和密码）
-func ParseToken(token string) (*Claims, error) {
-
-	//用于解析鉴权的声明，方法内部主要是具体的解码和校验的过程，最终返回*Token
-	tokenClaims, err := jwt.ParseWithClaims(token, &Claims{}, func(token *jwt.Token) (interface{}, error) {
-		return jwtSecret, nil
-	})
-
-	if tokenClaims != nil {
-		// 从tokenClaims中获取到Claims对象，并使用断言，将该对象转换为我们自己定义的Claims
-		// 要传入指针，项目中结构体都是用指针传递，节省空间。
-		if claims, ok := tokenClaims.Claims.(*Claims); ok && tokenClaims.Valid {
-			return claims, nil
-		}
-	}
-	return nil, err
 }

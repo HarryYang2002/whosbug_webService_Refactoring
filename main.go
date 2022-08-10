@@ -12,7 +12,7 @@ func main() {
 	api := r.Group("/api/v1/users")
 	{
 		api.POST("/", views.UserCreate)
-		api.GET("/:id", userRead)
+		api.GET("/:id", views.UserRead)
 		api.PUT("/:id", userUpdate)
 		api.PATCH("/:id", userPartialUpdate)
 	}
@@ -34,10 +34,6 @@ func main() {
 
 	}
 	r.Run(":8083")
-}
-
-func userRead(context *gin.Context) {
-
 }
 
 func userUpdate(context *gin.Context) {

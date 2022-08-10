@@ -4,10 +4,14 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+//登录表单
+
 type LoginForm struct {
 	Username string `form:"username" json:"username" binding:"required,min=3,max=20"`
 	Password string `form:"password" json:"password" binding:"required,min=8"`
 }
+
+//用户注册表单
 
 type RegisterForm struct {
 	Username  string `form:"username" json:"username" binding:"required,min=1,max=150,usernamerule"`
@@ -16,6 +20,8 @@ type RegisterForm struct {
 	Lastname  string `form:"last_name" json:"last_name" binding:"max=150"`
 	Email     string `form:"email" json:"email" binding:"required,email,max=254"`
 }
+
+//用户名规则
 
 var UsernameRule validator.Func = func(fl validator.FieldLevel) bool {
 	s, _ := fl.Field().Interface().(string)
@@ -26,4 +32,10 @@ var UsernameRule validator.Func = func(fl validator.FieldLevel) bool {
 		}
 	}
 	return true
+}
+
+//用户ID,采用uuid
+
+type UserID struct {
+	ID string `uri:"id" binding:"required,uuid"`
 }

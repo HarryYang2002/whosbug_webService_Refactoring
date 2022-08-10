@@ -2,19 +2,19 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"webService_Refactoring/views"
+	. "webService_Refactoring/views"
 )
 
 func main() {
 	r := gin.Default()
-	r.POST("/api-token-auth", views.CreateToken)
+	r.POST("/api-token-auth", CreateToken)
 
 	api := r.Group("/api/v1/users")
 	{
-		api.POST("/", views.UserCreate)
-		api.GET("/:id", views.UserRead)
-		api.PUT("/:id", userUpdate)
-		api.PATCH("/:id", userPartialUpdate)
+		api.POST("/", UserCreate)
+		api.GET("/:id", UserRead)
+		api.PUT("/:id", UpdateUser)
+		api.PATCH("/:id", UpdateUser)
 	}
 
 	whosbug := r.Group("/whosbug")
@@ -34,10 +34,6 @@ func main() {
 
 	}
 	r.Run(":8083")
-}
-
-func userUpdate(context *gin.Context) {
-
 }
 
 func userPartialUpdate(context *gin.Context) {

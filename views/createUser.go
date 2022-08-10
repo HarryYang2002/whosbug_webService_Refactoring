@@ -5,14 +5,14 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 	"net/http"
-	. "webService_Refactoring/modules"
+	"webService_Refactoring/modules"
 )
 
 func UserCreate(context *gin.Context) {
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
-		v.RegisterValidation("usernamerule", UsernameRule)
+		v.RegisterValidation("usernamerule", modules.UsernameRule)
 	}
-	var registerForm RegisterForm
+	var registerForm modules.RegisterForm
 	err := context.ShouldBind(&registerForm)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{

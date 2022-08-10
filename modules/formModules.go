@@ -39,3 +39,8 @@ var UsernameRule validator.Func = func(fl validator.FieldLevel) bool {
 type UserID struct {
 	ID string `uri:"id" binding:"required,uuid"`
 }
+
+type UpdateUsers struct {
+	FirstName string `form:"first_name" binding:"required,max=150"`
+	LastName  string `form:"last_name" binding:"required,max=150"`
+}

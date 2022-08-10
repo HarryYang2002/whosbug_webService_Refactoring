@@ -36,10 +36,6 @@ func main() {
 	r.Run(":8083")
 }
 
-func userPartialUpdate(context *gin.Context) {
-
-}
-
 func commitsInfoCreate(context *gin.Context) {
 
 }

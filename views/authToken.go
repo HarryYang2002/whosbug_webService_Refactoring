@@ -5,12 +5,8 @@ import (
 	"encoding/hex"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	. "webService_Refactoring/modules"
 )
-
-type LoginForm struct {
-	Username string `form:"username" json:"username" binding:"required,min=3,max=20"`
-	Password string `form:"password" json:"password" binding:"required,min=8"`
-}
 
 func MD5(v string) string {
 	d := []byte(v)

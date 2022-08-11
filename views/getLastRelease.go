@@ -15,7 +15,7 @@ func GetLastRelease(c *gin.Context) {
 	if err := c.ShouldBind(&id); err != nil {
 		err.Error()
 	}
-	dsn := "host=localhost user=postgres password=endata dbname=whosbugdemo port=60000 " +
+	dsn := "host=localhost user=postgres password=123456 dbname=whobug2022 port=5433 " +
 		"sslmode=disable TimeZone=Asia/Shanghai"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {

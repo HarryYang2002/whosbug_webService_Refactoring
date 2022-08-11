@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	. "webService_Refactoring/middlewear"
 	. "webService_Refactoring/views"
 )
 
@@ -16,6 +17,7 @@ func main() {
 	api := r.Group("/api/v1/users")
 	{
 		api.POST("/", UserCreate)
+		r.Use(CheckToken())
 		api.GET("/:id", UserRead)
 		api.PUT("/:id", UpdateUser)
 		api.PATCH("/:id", UpdateUserPartial)
@@ -23,7 +25,7 @@ func main() {
 
 	whosbug := r.Group("/whosbug")
 	{
-		whosbug.POST("/commits/commits-info", commitsInfoCreate)
+		whosbug.POST("/commits/commits-info", CommitsInfoCreate)
 		whosbug.POST("/commits/delete_uncalculate", commitsDeleteUncalculateCreate)
 		whosbug.POST("/commits/diffs", commitsDiffsCreate)
 		whosbug.POST("/commits/reviewers", commitsReviewersCreate)
@@ -38,10 +40,6 @@ func main() {
 
 	}
 	r.Run(":8083")
-}
-
-func commitsInfoCreate(context *gin.Context) {
-
 }
 
 func commitsDeleteUncalculateCreate(context *gin.Context) {

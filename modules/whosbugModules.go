@@ -22,3 +22,9 @@ type T struct {
 	Release Release
 	// commit 暂定
 }
+
+type T2 struct {
+	Project Project
+	Release Release
+	Commit  []Commit
+}

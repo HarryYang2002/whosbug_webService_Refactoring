@@ -1,14 +1,21 @@
 package main
 
+import (
+	"fmt"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+	. "webService_Refactoring/modules"
+)
+
 func main() {
-	//s := "561651+dag-oeugh.$^&"
-	//for _, ch := range s {
-	//	if (ch >= 48 && ch <= 57) || (ch >= 65 && ch <= 90) || (ch >= 97 && ch <= 122) ||
-	//		ch == 64 || ch == 43 || ch == 45 || ch == 46 || ch == 95 {
-	//		fmt.Println("true")
-	//	} else {
-	//		fmt.Println("false")
-	//	}
-	//}
+	dsn := "host=localhost user=postgres password=123456 dbname=whobug2022 port=5433 " +
+		"sslmode=disable TimeZone=Asia/Shanghai"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		err.Error()
+	}
+	temp := DbCreateProject{}
+	db.Table("commits").Where("project_id = ?", 123).Find(&temp)
+	fmt.Println(temp.ReleaseVersion)
 
 }

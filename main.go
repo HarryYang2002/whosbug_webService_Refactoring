@@ -7,6 +7,8 @@ import (
 
 //包含所有的路由组，go build main.go 即可运行
 
+//TODO 鉴权中间件
+
 func main() {
 	r := gin.Default()
 	r.POST("/api-token-auth", CreateToken)
@@ -32,7 +34,7 @@ func main() {
 		whosbug.POST("/delete_all_related", deleteAllRelated)
 		whosbug.GET("/liveness", LivenessList)
 		whosbug.POST("/owner", ownerCreate)
-		whosbug.POST("/releases/last", releasesLastCreate)
+		whosbug.POST("/releases/last", GetLastRelease)
 
 	}
 	r.Run(":8083")

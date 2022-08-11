@@ -5,6 +5,8 @@ import (
 	. "webService_Refactoring/views"
 )
 
+//包含所有的路由组，go build main.go 即可运行
+
 func main() {
 	r := gin.Default()
 	r.POST("/api-token-auth", CreateToken)
@@ -26,10 +28,10 @@ func main() {
 		whosbug.POST("/commits/rules/", commitsRulesCreate)
 		whosbug.POST("/commits/train_method", commitsTrainMethodCteate)
 		whosbug.POST("/commits.upload-done", commitsUploadDoneCreate)
-		whosbug.POST("/create-project-release", createProjectRelease)
+		whosbug.POST("/create-project-release", CreateProjectRelease)
 		whosbug.POST("/delete_all_related", deleteAllRelated)
-		whosbug.GET("/liveness", livenessList)
-		whosbug.POST("/owner", OwnerCreate)
+		whosbug.GET("/liveness", LivenessList)
+		whosbug.POST("/owner", ownerCreate)
 		whosbug.POST("/releases/last", releasesLastCreate)
 
 	}
@@ -64,19 +66,11 @@ func commitsUploadDoneCreate(context *gin.Context) {
 
 }
 
-func createProjectRelease(context *gin.Context) {
-
-}
-
 func deleteAllRelated(context *gin.Context) {
 
 }
 
-func livenessList(context *gin.Context) {
-
-}
-
-func OwnerCreate(context *gin.Context) {
+func ownerCreate(context *gin.Context) {
 
 }
 

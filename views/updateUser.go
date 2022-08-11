@@ -10,6 +10,10 @@ import (
 	. "webService_Refactoring/modules"
 )
 
+//TODO 优化1：连接数据库代码冗余...
+//     优化2：命名...
+
+// UpdateUser 更新用户信息，put为上传，patch为修改
 func UpdateUser(context *gin.Context) {
 	var userId UserID
 	err := context.ShouldBindUri(&userId)

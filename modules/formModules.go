@@ -1,5 +1,7 @@
 package modules
 
+//这里是post方法中定义表单的结构体
+
 import (
 	"github.com/go-playground/validator/v10"
 )

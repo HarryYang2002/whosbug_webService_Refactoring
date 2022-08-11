@@ -12,7 +12,9 @@ import (
 	. "webService_Refactoring/modules"
 )
 
+// UserCreate 生成用户数据并存储到数据库中
 func UserCreate(context *gin.Context) {
+	//注册命名规则
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		v.RegisterValidation("usernamerule", UsernameRule)
 	}
@@ -45,7 +47,7 @@ func UserCreate(context *gin.Context) {
 		UserId:        userUUID,
 		UserName:      registerForm.Username,
 		UserToken:     token,
-		UserPassword:  registerForm.Password,
+		UserPassword:  MD5(registerForm.Password), //暂定md5密文存储密码，存在一些问题，与导师商量后再定
 		UserFirstName: registerForm.Firstname,
 		UserLastName:  registerForm.Lastname,
 		UserEmail:     registerForm.Email,

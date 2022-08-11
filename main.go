@@ -14,7 +14,7 @@ func main() {
 		api.POST("/", UserCreate)
 		api.GET("/:id", UserRead)
 		api.PUT("/:id", UpdateUser)
-		api.PATCH("/:id", UpdateUser)
+		api.PATCH("/:id", UpdateUserPartial)
 	}
 
 	whosbug := r.Group("/whosbug")

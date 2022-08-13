@@ -47,6 +47,6 @@ type UpdateUsers struct {
 	LastName  string `form:"last_name" binding:"required,max=150"`
 }
 
-type ProjectID struct {
-	Pid int `form:"pid" binding:"required"`
+type ProjectId struct {
+	Pid int `form:"pid" binding:"required" validate:"number"`
 }

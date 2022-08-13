@@ -39,7 +39,7 @@ func CreateProjectRelease(context *gin.Context) {
 	res := db.Table("projects").Where("project_id = ?", pid).First(&project)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		project.ProjectId = pid
-		fmt.Println(db.Table("project").Create(&project).RowsAffected)
+		fmt.Println(db.Table("projects").Create(&project).RowsAffected)
 	}
 	release := ReleasesTable{}
 	res2 := db.Table("releases").Where("release_version = ? "+

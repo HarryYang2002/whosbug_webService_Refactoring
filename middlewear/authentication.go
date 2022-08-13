@@ -35,6 +35,7 @@ func CheckToken() gin.HandlerFunc {
 				"detail": "Authentication credentials were not provided.",
 			})
 			c.Abort()
+			return
 		}
 	}
 }

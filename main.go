@@ -26,16 +26,17 @@ func main() {
 		whosbug.POST("/commits/commits-info", CommitsInfoCreate)
 		whosbug.POST("/commits/delete_uncalculate", UncalculateDelete)
 		whosbug.POST("/commits/diffs", commitsDiffsCreate)
+		//review 暂时不重构
 		whosbug.POST("/commits/reviewers", CommitsReviewersCreate)
-		whosbug.POST("/commits/rules/", commitsRulesCreate)
+		whosbug.POST("/commits/rules/", CommitsRulesCreate)
+		//
 		whosbug.POST("/commits/train_method", CommitsTrainMethodCreate)
 		whosbug.POST("/commits.upload-done", CommitsUploadDoneCreate)
 		whosbug.POST("/create-project-release", CreateProjectRelease)
 		whosbug.POST("/delete_all_related", AllRelatedDelete)
 		whosbug.GET("/liveness", LivenessList)
-		whosbug.POST("/owner", OwnerCreate)
+		whosbug.POST("/owner", OwnerCreate) // 新功能接口（接受堆栈信息，数据库匹配，返回需计算函数的切片）
 		whosbug.POST("/releases/last", GetLastRelease)
-		//TODO 新算法所需接口
 	}
 	r.Run(":8083")
 }
@@ -45,9 +46,5 @@ func OwnerCreate(context *gin.Context) {
 }
 
 func commitsDiffsCreate(context *gin.Context) {
-
-}
-
-func commitsRulesCreate(context *gin.Context) {
 
 }

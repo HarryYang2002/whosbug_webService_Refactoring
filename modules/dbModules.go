@@ -17,7 +17,7 @@ type UsersTable struct {
 }
 
 type CommitsTable struct {
-	TableId        int64  `gorm:"primaryKey,type:bigserial"`
+	TableId        uint64 `gorm:"primaryKey,type:bigserial"`
 	Hash           string `gorm:"type:varchar(1000)"`
 	Time           string `gorm:"type:varchar(1000)"`
 	Author         string `gorm:"type:varchar(1000)"`
@@ -26,19 +26,19 @@ type CommitsTable struct {
 }
 
 type ProjectsTable struct {
-	TableID   int `gorm:"type:int"`
-	ProjectId int `gorm:"type:int"`
+	TableId   uint64 `gorm:"type:primaryKey,serial"`
+	ProjectId int    `gorm:"type:int"`
 }
 
 type ReleasesTable struct {
-	TableId        int    `gorm:"primaryKey,type:bigserial"`
+	TableId        uint64 `gorm:"primaryKey,type:bigserial"`
 	ReleaseVersion string `gorm:"type:varchar(200)"`
 	LastCommitHash string `gorm:"type:varchar(1000)"`
 	ProjectId      int    `gorm:"type:int"`
 }
 
 type UncountedObjectsTable struct {
-	TableId        int64  `gorm:"primaryKey,type:bigserial"`
+	TableId        uint64 `gorm:"primaryKey,type:bigserial"`
 	Parameters     string `gorm:"type:varchar(10000)"`
 	Hash           string `gorm:"type:varchar(1000)"`
 	StartLine      int    `gorm:"type:int"`

@@ -34,15 +34,15 @@ func CreateProjectRelease(context *gin.Context) {
 	}
 	temp := DbCreateProject{}
 	//db.Where("project_id = ?", pid).First(&temp)
-	db.Table("commits").Where("project_id = ?", pid).Find(&temp)
-	if temp.ReleaseVersion != "" && temp.ReleaseVersion == t.Release.Release {
+	db.Table("commits").Where("project_id = ? and release_version = ?", pid, t.Release.Version).Find(&temp)
+	if temp.ReleaseVersion != "" && temp.ReleaseVersion == t.Release.Version {
 		context.JSON(http.StatusNotFound, gin.H{
 			"error": "The Project and Release already exist, update the commit pid " + t.Project.Pid +
-				" release: " + t.Release.Release + ", commit_hash: " + t.Release.CommitHash,
+				" release: " + t.Release.Version + ", commit_hash: " + t.Release.CommitHash,
 		})
 		return
 	}
-	release := t.Release.Release
+	release := t.Release.Version
 	commitHash := t.Release.CommitHash
 	temp.ProjectId = pid
 	temp.ReleaseVersion = release

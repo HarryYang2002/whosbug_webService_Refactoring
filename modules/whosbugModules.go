@@ -5,8 +5,14 @@ package modules
 type Project struct {
 	Pid string `form:"pid" json:"pid" binding:"required"`
 }
-type Release struct {
+
+/*type Release1 struct {
 	Release    string `form:"release" json:"release" binding:"required"`
+	CommitHash string `form:"commit_hash" json:"commit_hash" binding:"required"`
+}*/
+
+type Release struct {
+	Version    string `form:"version" json:"version" binding:"required"`
 	CommitHash string `form:"commit_hash" json:"commit_hash" binding:"required"`
 }
 
@@ -27,4 +33,9 @@ type T2 struct {
 	Project Project
 	Release Release
 	Commit  []Commit
+}
+
+type T3 struct {
+	Project Project
+	Release Release
 }

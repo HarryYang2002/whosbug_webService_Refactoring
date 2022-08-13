@@ -6,11 +6,6 @@ type Project struct {
 	Pid string `form:"pid" json:"pid" binding:"required"`
 }
 
-/*type Release1 struct {
-	Release    string `form:"release" json:"release" binding:"required"`
-	CommitHash string `form:"commit_hash" json:"commit_hash" binding:"required"`
-}*/
-
 type Release struct {
 	Version    string `form:"version" json:"version" binding:"required"`
 	CommitHash string `form:"commit_hash" json:"commit_hash" binding:"required"`
@@ -35,7 +30,19 @@ type T2 struct {
 	Commit  []Commit
 }
 
-type T3 struct {
-	Project Project
-	Release Release
+type ReleaseModules struct {
+	Version        string
+	LastCommitHash string
+	Project        int //or string?
+}
+
+type Object struct {
+	Path          string
+	ObjectId      string
+	OwnerInfo     string
+	OldConfidence float64
+	StartLine     int
+	EndLine       int
+	//commit string ForeignKey 暂定
+	parameters string
 }

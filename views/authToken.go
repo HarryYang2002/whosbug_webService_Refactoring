@@ -38,7 +38,7 @@ func CreateToken(context *gin.Context) {
 		"token": MD5(token),
 	})
 
-	dbCreateUser := DbCreateUser{
+	dbCreateUser := UsersTable{
 		UserId:       CreateUUID(),
 		UserName:     loginForm.Username,
 		UserToken:    MD5(token),

@@ -1,6 +1,7 @@
 package views
 
 import (
+	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
@@ -24,6 +25,8 @@ func CreateProjectRelease(context *gin.Context) {
 	if err != nil {
 		context.Status(404)
 	}
+	releaseVersion := t.Release.Version
+	releaseHash := t.Release.CommitHash
 	// 数据库查询pid，若存在且数据库中last_commit_hash 为传递的last_commit_hash
 	// 不新建project并返回404
 	dsn := "host=localhost user=postgres password=123456 dbname=whobug2022 port=5433 " +
@@ -32,22 +35,26 @@ func CreateProjectRelease(context *gin.Context) {
 	if err2 != nil {
 		err2.Error()
 	}
-	temp := DbCreateProject{}
-	//db.Where("project_id = ?", pid).First(&temp)
-	db.Table("commits").Where("project_id = ? and release_version = ?", pid, t.Release.Version).Find(&temp)
-	if temp.ReleaseVersion != "" && temp.ReleaseVersion == t.Release.Version {
+	project := ProjectsTable{}
+	res := db.Table("projects").Where("project_id = ?", pid).First(&project)
+	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
+		project.ProjectId = pid
+		fmt.Println(db.Table("project").Create(&project).RowsAffected)
+	}
+	release := ReleasesTable{}
+	res2 := db.Table("releases").Where("release_version = ? "+
+		"and last_commit_hash = ?", releaseVersion, releaseHash).First(&release)
+	if errors.Is(res2.Error, gorm.ErrRecordNotFound) {
+		release.ProjectId = pid
+		release.ReleaseVersion = releaseVersion
+		release.LastCommitHash = releaseHash
+		fmt.Println(db.Table("releases").Create(&release).RowsAffected)
+	} else {
 		context.JSON(http.StatusNotFound, gin.H{
 			"error": "The Project and Release already exist, update the commit pid " + t.Project.Pid +
 				" release: " + t.Release.Version + ", commit_hash: " + t.Release.CommitHash,
 		})
 		return
 	}
-	release := t.Release.Version
-	commitHash := t.Release.CommitHash
-	temp.ProjectId = pid
-	temp.ReleaseVersion = release
-	temp.PvLastCommitHash = commitHash
-	//新建project并存储进数据库中
-	fmt.Println(db.Table("commits").Create(&temp).RowsAffected)
 	context.Status(201)
 }

@@ -43,7 +43,7 @@ func UserCreate(context *gin.Context) {
 		"auth_token": token,
 	})
 
-	dbCreateUser := DbCreateUser{
+	dbCreateUser := UsersTable{
 		UserId:        userUUID,
 		UserName:      registerForm.Username,
 		UserToken:     token,

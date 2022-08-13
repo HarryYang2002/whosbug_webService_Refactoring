@@ -24,10 +24,11 @@ func CheckToken() gin.HandlerFunc {
 				"detail": "Authentication credentials were not provided.",
 			})
 			c.Abort()
+			return
 		}
 		arr := strings.Fields(token)
 		realToken := arr[1]
-		temp := DbCreateUser{}
+		temp := UsersTable{}
 		res := db.Table("users").Where("user_token = ?", realToken).First(&temp)
 		if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 			c.JSON(http.StatusNotFound, gin.H{

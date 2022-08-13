@@ -19,7 +19,7 @@ func UserRead(context *gin.Context) {
 		return
 	}
 
-	temp := DbCreateUser{}
+	temp := UsersTable{}
 	var searchId string
 	searchId = context.Param("id")
 	fmt.Println(searchId)

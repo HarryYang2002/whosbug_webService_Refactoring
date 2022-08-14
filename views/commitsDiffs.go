@@ -4,11 +4,13 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"net/http"
+	"strconv"
 	. "webService_Refactoring/modules"
 )
+
+//TODO 逻辑貌似有问题
 
 func CommitsDiffsCreate(context *gin.Context) {
 
@@ -22,13 +24,10 @@ func CommitsDiffsCreate(context *gin.Context) {
 		})
 		return
 	}
-	dsn := "host=localhost user=postgres password=123456 dbname=whobug2022 port=5433 " +
-		"sslmode=disable TimeZone=Asia/Shanghai"
-	db, err2 := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err2 != nil {
-		err2.Error()
+	pid, err := strconv.Atoi(t.Project.Pid)
+	if err != nil {
+		context.Status(404)
 	}
-	pid := t.Project.Pid
 	version := t.Release.Version
 	temp := ProjectsTable{}
 	res := db.Table("projects").First(&temp, "project_id = ? ", pid)
@@ -37,7 +36,7 @@ func CommitsDiffsCreate(context *gin.Context) {
 		return
 	}
 	temp1 := ReleasesTable{}
-	res1 := db.Table("release").First(&temp1, "release_version = ?", pid, version)
+	res1 := db.Table("release").First(&temp1, "release_version = ?", version)
 	if errors.Is(res1.Error, gorm.ErrRecordNotFound) {
 		context.Status(400)
 		return

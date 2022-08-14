@@ -3,7 +3,7 @@ module webService_Refactoring
 go 1.18
 
 require (
-	github.com/cheggaaa/pb/v3 v3.1.0
+	github.com/cheggaaa/pb v1.0.29
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-playground/validator/v10 v10.11.0
 	github.com/google/uuid v1.3.0
@@ -12,7 +12,6 @@ require (
 )
 
 require (
-	github.com/VividCortex/ewma v1.1.1 // indirect
 	github.com/fatih/color v1.10.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect

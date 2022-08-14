@@ -1,10 +1,12 @@
 package views
 
 import (
-	"encoding/json"
+	"errors"
+	"fmt"
 	"github.com/gin-gonic/gin"
-	"io/ioutil"
+	"gorm.io/gorm"
 	"net/http"
+	"strconv"
 	. "webService_Refactoring/modules"
 )
 
@@ -12,26 +14,42 @@ func CommitsInfoCreate(context *gin.Context) {
 
 	var t T2
 
-	//err3 := context.ShouldBind(&t)
+	err := context.ShouldBind(&t)
 
-	// if err3 != nil {
-	// 	context.JSON(http.StatusBadRequest, gin.H{
-	// 		"error": err3.Error(),
-	// 	})
-	// 	return
-	// }
-	bodyBytes, _ := ioutil.ReadAll(context.Request.Body)
-	err := json.Unmarshal(bodyBytes, &t)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
-	context.JSON(http.StatusOK, gin.H{
+	pid, err2 := strconv.Atoi(t.Project.Pid)
+	if err2 != nil {
+		context.Status(404)
+	}
+	version := t.Release.Version
+	temp := ProjectsTable{}
+	res := db.Table("projects").First(&temp, "project_id = ? ", pid)
+	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
+		context.Status(400)
+		return
+	}
+	temp1 := ReleasesTable{}
+	res1 := db.Table("releases").First(&temp1, "release_version = ?", version)
+	if errors.Is(res1.Error, gorm.ErrRecordNotFound) {
+		context.Status(400)
+		return
+	}
+	releaseTableId := temp1.TableId
+	temp2 := CommitsTable{}
+	n := len(t.Commit)
+	for i := 0; i < n; i++ {
+		temp2.ReleaseTableId = int(releaseTableId)
+		temp2.Hash = t.Commit[i].Hash
+		temp2.Author = t.Commit[i].Author
+		temp2.Email = t.Commit[i].Email
+		temp2.Time = t.Commit[i].Email
+		fmt.Println(db.Table("commit").Create(&temp2).RowsAffected)
+	}
+	context.Status(200)
 
-		// "project": t.Project,
-		// "release": t.Release,
-		"": t,
-	})
 }

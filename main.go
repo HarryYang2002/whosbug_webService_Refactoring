@@ -25,7 +25,7 @@ func main() {
 	{
 		whosbug.POST("/commits/commits-info", CommitsInfoCreate)
 		whosbug.POST("/commits/delete_uncalculate", UncalculateDelete)
-		whosbug.POST("/commits/diffs", commitsDiffsCreate)
+		whosbug.POST("/commits/diffs", CommitsDiffsCreate)
 		//review 暂时不重构
 		whosbug.POST("/commits/reviewers", CommitsReviewersCreate)
 		whosbug.POST("/commits/rules/", CommitsRulesCreate)
@@ -42,9 +42,5 @@ func main() {
 }
 
 func OwnerCreate(context *gin.Context) {
-
-}
-
-func commitsDiffsCreate(context *gin.Context) {
 
 }

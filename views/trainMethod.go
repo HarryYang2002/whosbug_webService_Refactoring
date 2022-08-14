@@ -34,7 +34,7 @@ func CommitsTrainMethodCreate(context *gin.Context) {
 		return
 	}
 	temp1 := ReleasesTable{}
-	res1 := db.Table("release").First(&temp1, "release_version = ?", version)
+	res1 := db.Table("releases").First(&temp1, "release_version = ?", version)
 	if errors.Is(res1.Error, gorm.ErrRecordNotFound) {
 		context.Status(400)
 		return

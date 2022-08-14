@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"net/http"
 	"strconv"
@@ -29,12 +28,6 @@ func CreateProjectRelease(context *gin.Context) {
 	releaseHash := t.Release.CommitHash
 	// 数据库查询pid，若存在且数据库中last_commit_hash 为传递的last_commit_hash
 	// 不新建project并返回404
-	dsn := "host=localhost user=postgres password=123456 dbname=whobug2022 port=5433 " +
-		"sslmode=disable TimeZone=Asia/Shanghai"
-	db, err2 := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err2 != nil {
-		err2.Error()
-	}
 	project := ProjectsTable{}
 	res := db.Table("projects").Where("project_id = ?", pid).First(&project)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {

@@ -6,8 +6,6 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 	"net/http"
 	. "webService_Refactoring/modules"
 )
@@ -51,12 +49,6 @@ func UserCreate(context *gin.Context) {
 		UserFirstName: registerForm.Firstname,
 		UserLastName:  registerForm.Lastname,
 		UserEmail:     registerForm.Email,
-	}
-	dsn := "host=localhost user=postgres password=123456 dbname=whobug2022 port=5433 " +
-		"sslmode=disable TimeZone=Asia/Shanghai"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		err.Error()
 	}
 	fmt.Println(db.Table("users").Create(&dbCreateUser).RowsAffected)
 }

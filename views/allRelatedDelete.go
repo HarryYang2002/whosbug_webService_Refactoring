@@ -3,7 +3,6 @@ package views
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"net/http"
 	"strconv"
@@ -26,13 +25,6 @@ func AllRelatedDelete(context *gin.Context) {
 		context.Status(404)
 	}
 	version := t.Release.Version
-	//连接数据库
-	dsn := "host=localhost user=postgres password=123456 dbname=whobug2022 port=5433 " +
-		"sslmode=disable TimeZone=Asia/Shanghai"
-	db, err2 := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err2 != nil {
-		err2.Error()
-	}
 	//以pid去找
 	project := ProjectsTable{}
 	res := db.Table("projects").Where("project_id = ?", pid).First(&project)

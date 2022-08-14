@@ -37,12 +37,6 @@ func UpdateUser(context *gin.Context) {
 	fn := context.PostForm("first_name")
 	ln := context.PostForm("last_name")
 
-	dsn := "host=localhost user=postgres password=123456 dbname=whobug2022 port=5433 " +
-		"sslmode=disable TimeZone=Asia/Shanghai"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		err.Error()
-	}
 	res := db.Table("users").First(&temp, "user_id = ?", searchId)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		context.Status(401)

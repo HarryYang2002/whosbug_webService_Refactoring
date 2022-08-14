@@ -3,7 +3,6 @@ package views
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"net/http"
 	"strconv"
@@ -13,12 +12,6 @@ import (
 func GetLastRelease(c *gin.Context) {
 	var id ProjectId
 	if err := c.ShouldBind(&id); err != nil {
-		err.Error()
-	}
-	dsn := "host=localhost user=postgres password=123456 dbname=whobug2022 port=5433 " +
-		"sslmode=disable TimeZone=Asia/Shanghai"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
 		err.Error()
 	}
 	temp := ReleasesTable{}

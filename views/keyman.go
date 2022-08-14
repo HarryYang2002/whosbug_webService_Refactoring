@@ -1,12 +1,48 @@
 package views
 
 import (
-	"fmt"
 	"math"
 )
 
-func Test() {
-	fmt.Println(calculateInnerModel(200))
+//  @Description: 根据崩溃堆栈解析出来的objects切片进行计算，返回出错率前五高的函数及每个函数前五名责任人
+//  @param  objects 解析出来的堆栈函数切片
+//  @return  bugOrigin 本次错误的主要责任人
+//  @author  Halokk
+func getBugOrigin(objects []objectInfo) (bugOringin []bugOriginInfo) {
+	var methods []objectInfo
+	var frameNumber []int
+	var relevanceDistance []int
+
+	//  筛选出堆栈中每个函数并统计出现在堆栈中的次数
+	for dist, object := range objects {
+		flag, index := false, 0
+		for i, method := range methods {
+			if object.hash == method.hash {
+				flag = true
+				index = i
+				break
+			}
+		}
+
+		if flag {
+			frameNumber[index]++
+		} else {
+			methods = append(methods, object)
+			frameNumber = append(frameNumber, 1)
+			relevanceDistance = append(relevanceDistance, dist)
+		}
+	}
+
+	//  计算出错率
+	for i, method := range methods {
+		var bugMethod bugOriginInfo
+		bugMethod.object = method
+		bugMethod.wrongRate = calculateComtribution(method.oldConfidence, frameNumber[i], len(objects), relevanceDistance[i])
+		bugMethod.owners = calculateOwnerWeight(method.objectId)
+		bugOringin = append(bugOringin, bugMethod)
+	}
+
+	return bugOringin
 }
 
 //	@Description: innerValue的计算模型
@@ -34,11 +70,20 @@ func calculateInnerValue(oldConfidence float64, add, new, delete, old int) (inne
 }
 
 //	@Description: 根据定义链计算信息熵
-//	@param
+//	@param	objectId
 //	@return comentropy 信息熵
 //	@author Halokk 2022-08-12 16:09:29
-func calculateComentropy() (comentropy float64) {
-
+func calculateComentropy(objectId string) (comentropy float64) {
+	node := getChain(objectId)
+	comentropy = math.Log(math.E + float64(len(node.childs)))
+	if len(node.childs) != 0 {
+		average := 0.0
+		for _, object := range node.childs {
+			average += calculateComentropy(object.objectId)
+		}
+		average /= float64(len(node.childs))
+		comentropy *= average
+	}
 	return
 }
 
@@ -51,12 +96,12 @@ func calculateConfidence(innerValue, comentropy float64) float64 {
 	return math.Pow(innerValue, comentropy)
 }
 
-//	@Description: 当函数没有发生变更时，置信度应增加
+//	@Description: 当函数没有发生变更时，增加其置信度
 //  @param oldConfidence 旧的置信度
 //  @return confidence 置信度
 //	@author Halokk 2022-08-12 16:24:15
 func hightenConfidence(oldConfidence float64) float64 {
-	return (1.2349 - math.Pow(0.2, oldConfidence-0.1))
+	return 1.2349 - math.Pow(0.2, oldConfidence-0.1)
 }
 
 //	@Description: 根据置信度、出现在堆栈中的频率、与直接错误函数的距离计算对本次错误的贡献
@@ -71,11 +116,10 @@ func calculateComtribution(confidence float64, frameNumbers, totalNumbers, relev
 }
 
 //	@Description: 根据每次commit函数改动的比例以及迭代次序赋予责任人权重
-//  @param objectInfo 函数的结构体
-//  @param relevanceDistance 与直接错误函数的距离
-//  @return	[author-commitTime]weight
+//  @param objectId  函数ID
+//  @return	[author]weight
 //	@author Halokk 2022-08-12 17:37:36
-func getBugOwner(objectId string) (bugOwners map[string]float64) {
+func calculateOwnerWeight(objectId string) (bugOwners map[string]float64) {
 	historys := getHistory(objectId)
 	for _, history := range historys {
 		commit, _ := history.commitHistory, history.objectHistory
@@ -83,14 +127,19 @@ func getBugOwner(objectId string) (bugOwners map[string]float64) {
 		weight := 0.0
 		for _, notChangedPart := range historys {
 			if notChangedPart.commitHistory.commitHash != history.commitHistory.commitHash {
-				weight *= (1.0 - float64(notChangedPart.objectHistory.addedLineCount)/float64(notChangedPart.objectHistory.newlineCount))
+				weight *= float64((notChangedPart.objectHistory.addedLineCount)+notChangedPart.objectHistory.deletedlineCount) /
+					float64(notChangedPart.objectHistory.newlineCount+notChangedPart.objectHistory.deletedlineCount)
 			} else {
-				weight *= float64(notChangedPart.objectHistory.addedLineCount) / float64(notChangedPart.objectHistory.newlineCount)
+				weight *= float64(notChangedPart.objectHistory.addedLineCount) /
+					float64(notChangedPart.objectHistory.newlineCount)
 				break
 			}
 		}
-		bugOwners[owner] = weight
+		_, ok := bugOwners[owner]
+		if !ok {
+			bugOwners[owner] = 0
+		}
+		bugOwners[owner] += weight
 	}
-
 	return
 }

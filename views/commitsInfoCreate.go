@@ -48,7 +48,7 @@ func CommitsInfoCreate(context *gin.Context) {
 		temp2.Author = t.Commit[i].Author
 		temp2.Email = t.Commit[i].Email
 		temp2.Time = t.Commit[i].Email
-		fmt.Println(db.Table("commit").Create(&temp2).RowsAffected)
+		fmt.Println(db.Table("commits").Create(&temp2).RowsAffected)
 	}
 	context.Status(200)
 

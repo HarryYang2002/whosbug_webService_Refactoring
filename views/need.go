@@ -8,16 +8,23 @@ type commitInfo struct {
 }
 
 type objectInfo struct {
-	hash             string //Object所属的Commit
-	objectId         string //Object的定义链ID
-	oldObjectId      string //Object的旧定义链ID
-	parameters       string //方法的参数特征
-	startLine        int    //起始行
-	endLine          int    //结束行
-	oldlineCount     int    //旧行数
-	newlineCount     int    //新行数
-	deletedlineCount int    //移除行数
-	addedLineCount   int    //新增行数
+	hash             string  //Object所属的Commit
+	objectId         string  //Object的定义链ID
+	oldObjectId      string  //Object的旧定义链ID
+	oldConfidence    float64 //置信度
+	parameters       string  //方法的参数特征
+	startLine        int     //起始行
+	endLine          int     //结束行
+	oldlineCount     int     //旧行数
+	newlineCount     int     //新行数
+	deletedlineCount int     //移除行数
+	addedLineCount   int     //新增行数
+}
+
+type ownerInfo struct {
+	author string  //责任人名称
+	email  string  //邮箱
+	weight float64 //权重
 }
 
 type historyInfo struct {
@@ -25,8 +32,11 @@ type historyInfo struct {
 	objectHistory objectInfo
 }
 
-// [objectPath][author-commitTime]weight
-var bugOrigin map[string]map[string]float64
+type bugOriginInfo struct {
+	object    objectInfo
+	wrongRate float64
+	owners    map[string]float64
+}
 
 //  @param objectId
 //  @return []historyInfo
@@ -35,8 +45,13 @@ func getHistory(objectId string) (result []historyInfo) {
 	return
 }
 
-//  @param
-//  @return
-func getChain() {
-	return
+type TreeNode struct {
+	object objectInfo
+	childs []objectInfo
+}
+
+//  @param objectId 函数的id
+//  @return	chainNode 该函数所在的定义链的头结点
+func getChain(objectId string) (node TreeNode) {
+	return node
 }

@@ -17,7 +17,7 @@ type UsersTable struct {
 }
 
 type CommitsTable struct {
-	TableId        uint64 `gorm:"primary_key;type:bigserial auto_increment"`
+	TableId        uint64 `gorm:"primaryKey;auto_increment;type:bigserial"`
 	Hash           string `gorm:"type:varchar(1000)"`
 	Time           string `gorm:"type:varchar(1000)"`
 	Author         string `gorm:"type:varchar(1000)"`

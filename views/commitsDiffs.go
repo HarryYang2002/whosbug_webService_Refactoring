@@ -10,8 +10,6 @@ import (
 	. "webService_Refactoring/modules"
 )
 
-//TODO 逻辑貌似有问题
-
 func CommitsDiffsCreate(context *gin.Context) {
 
 	var t T4
@@ -36,19 +34,17 @@ func CommitsDiffsCreate(context *gin.Context) {
 		return
 	}
 	temp1 := ReleasesTable{}
-	res1 := db.Table("release").First(&temp1, "release_version = ?", version)
+	res1 := db.Table("releases").First(&temp1, "release_version = ?", version)
 	if errors.Is(res1.Error, gorm.ErrRecordNotFound) {
 		context.Status(400)
 		return
 	}
-	realRelease := ReleasesTable{}
 	commit := CommitsTable{}
+	db.Table("commits").First(&commit, "release_table_id = ?", temp1.TableId)
 	temp2 := UncountedObjectsTable{}
 	n := len(t.UncountedObject)
 	for i := 0; i < n; i++ {
-		db.Table("releases").First(&realRelease, "release_version = ?", version)
-		releaseId := realRelease.TableId
-		db.Table("commits").First(&commit, "release_table_id = ?", releaseId)
+		releaseId := temp1.TableId
 		commitId := commit.TableId
 		temp2.CommitTableId = int(commitId)
 		temp2.ReleaseTableId = int(releaseId)

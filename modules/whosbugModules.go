@@ -25,9 +25,15 @@ type T struct {
 }
 
 type T2 struct {
-	Project Project
-	Release Release
-	Commit  []Commit
+	Project Project  `json:"project"`
+	Release Release  `json:"release"`
+	Commit  []Commit `json:"commits"`
+}
+
+type T3 struct {
+	Project Project  `json:"project"`
+	Release Release  `json:"release"`
+	Object  []Object `json:"objects"`
 }
 
 type ReleaseModules struct {

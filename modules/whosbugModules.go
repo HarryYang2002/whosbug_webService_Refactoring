@@ -8,7 +8,7 @@ type Project struct {
 
 type Release struct {
 	Version    string `form:"version" json:"version" binding:"required"`
-	CommitHash string `form:"commit_hash" json:"commit_hash" binding:"required"`
+	CommitHash string `form:"last_commit_hash" json:"last_commit_hash" binding:"required"`
 }
 
 type Commit struct {
@@ -36,6 +36,20 @@ type ReleaseModules struct {
 	Project        int //or string?
 }
 
+type UncountedObject struct {
+	Hash             string `form:"hash" json:"hash" binding:"required"`
+	ObjectId         string `form:"object_id" json:"pbject_id" binding:"required"`
+	OldObjectId      string `form:"old_object_id " json:"old_object_id " binding:"required"`
+	Parameters       string `form:"parameters " json:"parameters " binding:"required"`
+	StartLine        int    `form:"start_line   " json:"start_line   " binding:"required"`
+	Path             string `form:"path   " json:"path   " binding:"required"`
+	EndLine          int    `form:"end_line   " json:"end_line   " binding:"required"`
+	OldLineCount     int    `form:"old_line_count   " json:"old_line_count   " binding:"required"`
+	NewLineCount     int    `form:"new_line_count   " json:"new_line_count   " binding:"required"`
+	DeletedLineCount int    `form:"deleted_line_count   " json:"deleted_line_count   " binding:"required"`
+	AddedLineCount   int    `form:"added_line_count    " json:"added_line_count    " binding:"required"`
+}
+
 type Object struct {
 	Path          string
 	ObjectId      string
@@ -45,4 +59,10 @@ type Object struct {
 	EndLine       int
 	//commit string ForeignKey 暂定
 	parameters string
+}
+
+type T4 struct {
+	Project         Project           `json:"project"`
+	Release         Release           `json:"release"`
+	UncountedObject []UncountedObject `json:"uncountedObjects"`
 }

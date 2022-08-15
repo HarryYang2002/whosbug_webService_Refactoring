@@ -92,7 +92,10 @@ func calculateComentropy(objectId string) (comentropy float64) {
 //  @param comentropy 信息熵
 //	@return	confidence 置信度
 //	@author Halokk 2022-08-12 14:42:25
-func calculateConfidence(innerValue, comentropy float64) float64 {
+func calculateConfidence(object uncalculateObjectInfo, oldConfidence float64) float64 {
+	innerValue := calculateInnerValue(oldConfidence, object.addedLineCount, object.newlineCount,
+		object.deletedlineCount, object.oldlineCount)
+	comentropy := calculateComentropy(object.objectId)
 	return math.Pow(innerValue, comentropy)
 }
 
@@ -123,7 +126,7 @@ func calculateOwnerWeight(objectId string) (bugOwners map[string]float64) {
 	historys := getHistory(objectId)
 	for _, history := range historys {
 		commit, _ := history.commitHistory, history.objectHistory
-		owner := commit.commitAuthor + "-" + commit.commitTime
+		owner := commit.commitAuthor
 		weight := 0.0
 		for _, notChangedPart := range historys {
 			if notChangedPart.commitHistory.commitHash != history.commitHistory.commitHash {

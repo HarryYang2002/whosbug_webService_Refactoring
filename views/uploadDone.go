@@ -39,9 +39,9 @@ func CommitsUploadDoneCreate(context *gin.Context) {
 		context.Status(400)
 		return
 	}
-	temp3 := UncountedObjectsTable{}
+	temp3 := ObjectsTable{}
 	lastCommitHash := t.Release.CommitHash
-	errs := db.Table("uncounted_objects").First(&temp3, "release_version = ? and pv_last_commit_hash =", version, lastCommitHash) //数据传到temp3里面，拿temp3去做算法
+	errs := db.Table("objects").First(&temp3, "release_version = ? and hash = ?", version, lastCommitHash) //数据传到temp3里面，拿temp3去做算法
 	if errs != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Delete error",

@@ -88,5 +88,5 @@ type GetConfidence struct {
 type JsonRes struct {
 	Status  string
 	Message string
-	Object  map[string]map[string]string
+	Object  []NodesTable
 }

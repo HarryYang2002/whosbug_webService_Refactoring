@@ -53,7 +53,7 @@ func AllRelatedDelete(context *gin.Context) {
 	//再以该条数据的table_id去uncounted_objects表中相应的commit_table_id
 	//再把该条数据删除（级联删除不会，只能用笨方法，我是菜逼）
 	realRelease := ReleasesTable{}
-	uncounted := UncountedObjectsTable{}
+	uncounted := ObjectsTable{}
 	commit := CommitsTable{}
 	db.Table("releases").First(&realRelease, "release_version = ?", version)
 	releaseId := realRelease.TableId
@@ -73,7 +73,7 @@ func AllRelatedDelete(context *gin.Context) {
 		})
 		return
 	}
-	res5 := db.Table("uncounted_objects").Delete(&uncounted, "commit_table_id = ?", uncountedId)
+	res5 := db.Table("objects").Delete(&uncounted, "commit_table_id = ?", uncountedId)
 	if res5.Error != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Delete all stuff error",

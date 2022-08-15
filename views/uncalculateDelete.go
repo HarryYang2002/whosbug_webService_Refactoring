@@ -46,13 +46,13 @@ func UncalculateDelete(context *gin.Context) {
 		return
 	}
 	realRelease := ReleasesTable{}
-	uncounted := UncountedObjectsTable{}
+	uncounted := ObjectsTable{}
 	commit := CommitsTable{}
 	db.Table("releases").First(&realRelease, "release_version = ?", version)
 	releaseId := realRelease.TableId
 	db.Table("commits").First(&commit, "release_table_id = ?", releaseId)
 	uncountedId := commit.TableId
-	res5 := db.Table("uncounted_objects").Delete(&uncounted, "commit_table_id = ?", uncountedId)
+	res5 := db.Table("objects").Delete(&uncounted, "commit_table_id = ?", uncountedId)
 	if res5.Error != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Delete error",

@@ -44,23 +44,23 @@ func CommitsDiffsCreate(context *gin.Context) {
 	db.Table("commits").First(&commit, "release_table_id = ?", temp1.TableId)
 	n := len(t.UncountedObject)
 	for i := 0; i < n; i++ {
-		temp2 := UncountedObjectsTable{}
+		temp2 := ObjectsTable{}
 		releaseId := temp1.TableId
 		commitId := commit.TableId
 		temp2.CommitTableId = int(commitId)
 		temp2.ReleaseTableId = int(releaseId)
-		temp2.OldObjectId = t.UncountedObject[i].OldObjectId
+		temp2.FatherObjectId = t.UncountedObject[i].OldObjectId
 		temp2.DeletedLine = t.UncountedObject[i].DeletedLineCount
 		temp2.EndLine = t.UncountedObject[i].EndLine
 		temp2.Hash = t.UncountedObject[i].Hash
 		temp2.NewLine = t.UncountedObject[i].NewLineCount
-		temp2.NewObjectId = t.UncountedObject[i].ObjectId
+		temp2.CurrentObjectId = t.UncountedObject[i].ObjectId
 		temp2.ObjectPath = t.UncountedObject[i].Path
 		temp2.OldLine = t.UncountedObject[i].OldLineCount
 		temp2.Parameters = t.UncountedObject[i].Parameters
 		temp2.StartLine = t.UncountedObject[i].StartLine
 		temp2.AddedLine = t.UncountedObject[i].AddedLineCount
-		fmt.Println(db.Table("uncounted_objects").Create(&temp2).RowsAffected)
+		fmt.Println(db.Table("objects").Create(&temp2).RowsAffected)
 	}
 
 	context.Status(200)

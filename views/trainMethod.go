@@ -39,9 +39,9 @@ func CommitsTrainMethodCreate(context *gin.Context) {
 		context.Status(400)
 		return
 	}
-	temp3 := UncountedObjectsTable{}
+	temp3 := ObjectsTable{}
 	lastCommitHash := t.Release.CommitHash
-	errs := db.Table("uncounted_objects").First(&temp3, "release_version = ? and pv_last_commit_hash =", version, lastCommitHash)
+	errs := db.Table("objects").First(&temp3, "release_version = ? and hash = ?", version, lastCommitHash)
 	if errs != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Delete error",

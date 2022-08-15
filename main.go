@@ -1,5 +1,6 @@
 package main
 
+/*
 import (
 	"github.com/gin-gonic/gin"
 	. "webService_Refactoring/middlewear"
@@ -7,7 +8,7 @@ import (
 )
 
 //包含所有的路由组，go build main.go 即可运行
-
+/*
 func main() {
 	r := gin.Default()
 	r.POST("/api-token-auth", CreateToken)
@@ -43,4 +44,4 @@ func main() {
 
 func OwnerCreate(context *gin.Context) {
 
-}
+}*/

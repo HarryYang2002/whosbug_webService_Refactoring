@@ -50,5 +50,5 @@ func UserCreate(context *gin.Context) {
 		UserLastName:  registerForm.Lastname,
 		UserEmail:     registerForm.Email,
 	}
-	fmt.Println(db.Table("users").Create(&dbCreateUser).RowsAffected)
+	fmt.Println(Db.Table("users").Create(&dbCreateUser).RowsAffected)
 }

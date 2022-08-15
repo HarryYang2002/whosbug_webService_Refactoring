@@ -37,7 +37,7 @@ func UpdateUser(context *gin.Context) {
 	fn := context.PostForm("first_name")
 	ln := context.PostForm("last_name")
 
-	res := db.Table("users").First(&temp, "user_id = ?", searchId)
+	res := Db.Table("users").First(&temp, "user_id = ?", searchId)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		context.Status(401)
 		return
@@ -45,7 +45,7 @@ func UpdateUser(context *gin.Context) {
 	temp.UserFirstName = fn
 	temp.UserLastName = ln
 
-	er := db.Table("users").Where("user_id = ?", searchId).Updates(&temp).Error
+	er := Db.Table("users").Where("user_id = ?", searchId).Updates(&temp).Error
 	if er != nil {
 		fmt.Println(er.Error())
 		return
@@ -80,13 +80,13 @@ func UpdateUserPartial(context *gin.Context) {
 	newfn := context.PostForm("first_name")
 	newln := context.PostForm("last_name")
 
-	dsn := "host=localhost user=postgres password=123456 dbname=whobug2022 port=5433 " +
+	dsn := "host=localhost user=postgres password=123456 Dbname=whobug2022 port=5433 " +
 		"sslmode=disable TimeZone=Asia/Shanghai"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	Db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		err.Error()
 	}
-	res := db.Table("users").First(&temp, "user_id = ?", searchId)
+	res := Db.Table("users").First(&temp, "user_id = ?", searchId)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		context.Status(401)
 		return
@@ -94,7 +94,7 @@ func UpdateUserPartial(context *gin.Context) {
 	temp.UserFirstName = newfn
 	temp.UserLastName = newln
 
-	er := db.Table("users").Where("user_id = ?", searchId).Updates(&temp).Error
+	er := Db.Table("users").Where("user_id = ?", searchId).Updates(&temp).Error
 	if er != nil {
 		fmt.Println(er.Error())
 		return

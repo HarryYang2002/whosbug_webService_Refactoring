@@ -27,7 +27,7 @@ func AllRelatedDelete(context *gin.Context) {
 	version := t.Release.Version
 	//以pid去找
 	project := ProjectsTable{}
-	res := db.Table("projects").Where("project_id = ?", pid).First(&project)
+	res := Db.Table("projects").Where("project_id = ?", pid).First(&project)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"error":  "Project get fails",
@@ -37,7 +37,7 @@ func AllRelatedDelete(context *gin.Context) {
 	}
 	//以version去找
 	release := ReleasesTable{}
-	res2 := db.Table("releases").Where("release_version = ? and project_id = ?", version, pid).First(&release)
+	res2 := Db.Table("releases").Where("release_version = ? and project_id = ?", version, pid).First(&release)
 	if errors.Is(res2.Error, gorm.ErrRecordNotFound) {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"error":  "Release get fails",
@@ -55,25 +55,25 @@ func AllRelatedDelete(context *gin.Context) {
 	realRelease := ReleasesTable{}
 	uncounted := ObjectsTable{}
 	commit := CommitsTable{}
-	db.Table("releases").First(&realRelease, "release_version = ?", version)
+	Db.Table("releases").First(&realRelease, "release_version = ?", version)
 	releaseId := realRelease.TableId
-	res3 := db.Table("releases").Delete(&realRelease, "release_version = ?", version)
+	res3 := Db.Table("releases").Delete(&realRelease, "release_version = ?", version)
 	if res3.Error != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Delete all stuff error",
 		})
 		return
 	}
-	db.Table("commits").First(&commit, "release_table_id = ?", releaseId)
+	Db.Table("commits").First(&commit, "release_table_id = ?", releaseId)
 	uncountedId := commit.TableId
-	res4 := db.Table("commits").Delete(&realRelease, "release_table_id = ?", releaseId)
+	res4 := Db.Table("commits").Delete(&realRelease, "release_table_id = ?", releaseId)
 	if res4.Error != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Delete all stuff error",
 		})
 		return
 	}
-	res5 := db.Table("objects").Delete(&uncounted, "commit_table_id = ?", uncountedId)
+	res5 := Db.Table("objects").Delete(&uncounted, "commit_table_id = ?", uncountedId)
 	if res5.Error != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Delete all stuff error",

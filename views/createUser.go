@@ -41,7 +41,7 @@ func UserCreate(context *gin.Context) {
 		"auth_token": token,
 	})
 
-	dbCreateUser := UsersTable{
+	DbCreateUser := UsersTable{
 		UserId:        userUUID,
 		UserName:      registerForm.Username,
 		UserToken:     token,
@@ -50,5 +50,5 @@ func UserCreate(context *gin.Context) {
 		UserLastName:  registerForm.Lastname,
 		UserEmail:     registerForm.Email,
 	}
-	fmt.Println(db.Table("users").Create(&dbCreateUser).RowsAffected)
+	fmt.Println(Db.Table("users").Create(&DbCreateUser).RowsAffected)
 }

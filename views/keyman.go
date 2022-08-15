@@ -8,8 +8,8 @@ import (
 //  @param  objects 解析出来的堆栈函数切片
 //  @return  bugOrigin 本次错误的主要责任人
 //  @author  Halokk
-func getBugOrigin(objects []objectInfo) (bugOringin []bugOriginInfo) {
-	var methods []objectInfo
+func GetBugOrigin(objects []ObjectInfo) (bugOringin []bugOriginInfo) {
+	var methods []ObjectInfo
 	var frameNumber []int
 	var relevanceDistance []int
 
@@ -37,7 +37,7 @@ func getBugOrigin(objects []objectInfo) (bugOringin []bugOriginInfo) {
 	for i, method := range methods {
 		var bugMethod bugOriginInfo
 		bugMethod.object = method
-		bugMethod.wrongRate = calculateComtribution(method.oldConfidence, frameNumber[i], len(objects), relevanceDistance[i])
+		bugMethod.wrongRate = calculateComtribution(method.confidence, frameNumber[i], len(objects), relevanceDistance[i])
 		bugMethod.owners = calculateOwnerWeight(method.objectId)
 		bugOringin = append(bugOringin, bugMethod)
 	}
@@ -92,7 +92,7 @@ func calculateComentropy(objectId string) (comentropy float64) {
 //  @param comentropy 信息熵
 //	@return	confidence 置信度
 //	@author Halokk 2022-08-12 14:42:25
-func calculateConfidence(object uncalculateObjectInfo, oldConfidence float64) float64 {
+func calculateConfidence(object UncalculateObjectInfo, oldConfidence float64) float64 {
 	innerValue := calculateInnerValue(oldConfidence, object.addedLineCount, object.newlineCount,
 		object.deletedlineCount, object.oldlineCount)
 	comentropy := calculateComentropy(object.objectId)

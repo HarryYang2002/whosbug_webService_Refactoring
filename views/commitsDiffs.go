@@ -29,19 +29,19 @@ func CommitsDiffsCreate(context *gin.Context) {
 	}
 	version := t.Release.Version
 	temp := ProjectsTable{}
-	res := db.Table("projects").First(&temp, "project_id = ? ", pid)
+	res := Db.Table("projects").First(&temp, "project_id = ? ", pid)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		context.Status(400)
 		return
 	}
 	temp1 := ReleasesTable{}
-	res1 := db.Table("releases").First(&temp1, "release_version = ?", version)
+	res1 := Db.Table("releases").First(&temp1, "release_version = ?", version)
 	if errors.Is(res1.Error, gorm.ErrRecordNotFound) {
 		context.Status(400)
 		return
 	}
 	commit := CommitsTable{}
-	db.Table("commits").First(&commit, "release_table_id = ?", temp1.TableId)
+	Db.Table("commits").First(&commit, "release_table_id = ?", temp1.TableId)
 	n := len(t.UncountedObject)
 	for i := 0; i < n; i++ {
 		temp2 := ObjectsTable{}
@@ -60,7 +60,7 @@ func CommitsDiffsCreate(context *gin.Context) {
 		temp2.Parameters = t.UncountedObject[i].Parameters
 		temp2.StartLine = t.UncountedObject[i].StartLine
 		temp2.AddedLine = t.UncountedObject[i].AddedLineCount
-		fmt.Println(db.Table("objects").Create(&temp2).RowsAffected)
+		fmt.Println(Db.Table("objects").Create(&temp2).RowsAffected)
 	}
 
 	context.Status(200)

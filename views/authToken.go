@@ -42,7 +42,7 @@ func CreateToken(context *gin.Context) {
 		UserToken:    MD5(token),
 		UserPassword: loginForm.Password,
 	}
-	fmt.Println(db.Table("users").Create(&dbCreateUser).RowsAffected)
+	fmt.Println(Db.Table("users").Create(&dbCreateUser).RowsAffected)
 
 }
 

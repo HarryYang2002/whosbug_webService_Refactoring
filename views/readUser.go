@@ -24,7 +24,7 @@ func UserRead(context *gin.Context) {
 	fmt.Println(searchId)
 
 	//tips：first为查询，可以返回查询错误，Find同样为查询，但不能返回错误
-	res := db.Table("users").First(&temp, "user_id = ?", searchId)
+	res := Db.Table("users").First(&temp, "user_id = ?", searchId)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		context.Status(401)
 		return

@@ -28,20 +28,20 @@ func CommitsTrainMethodCreate(context *gin.Context) {
 	}
 	version := t.Release.Version
 	temp := ProjectsTable{}
-	res := db.Table("projects").First(&temp, "project_id = ? ", pid)
+	res := Db.Table("projects").First(&temp, "project_id = ? ", pid)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		context.Status(400)
 		return
 	}
 	temp1 := ReleasesTable{}
-	res1 := db.Table("releases").First(&temp1, "release_version = ?", version)
+	res1 := Db.Table("releases").First(&temp1, "release_version = ?", version)
 	if errors.Is(res1.Error, gorm.ErrRecordNotFound) {
 		context.Status(400)
 		return
 	}
 	temp3 := ObjectsTable{}
 	lastCommitHash := t.Release.CommitHash
-	errs := db.Table("objects").First(&temp3, "release_version = ? and hash = ?", version, lastCommitHash)
+	errs := Db.Table("objects").First(&temp3, "release_version = ? and hash = ?", version, lastCommitHash)
 	if errs != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Delete error",

@@ -14,8 +14,8 @@ func main() {
 	if err != nil {
 		err.Error()
 	}
-	temp := DbCreateProject{}
+	temp := CommitsTable{}
 	db.Table("commits").Where("project_id = ?", 123).Find(&temp)
-	fmt.Println(temp.ReleaseVersion)
+	fmt.Println(temp.ReleaseTableId)
 
 }

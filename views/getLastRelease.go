@@ -15,7 +15,7 @@ func GetLastRelease(c *gin.Context) {
 		err.Error()
 	}
 	temp := ReleasesTable{}
-	res := db.Table("releases").Where("project_id = ?", id.Pid).First(&temp)
+	res := Db.Table("releases").Where("project_id = ?", id.Pid).First(&temp)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		info := "The project with pid = " + strconv.Itoa(id.Pid) + " does not exists."
 		c.JSON(http.StatusNotFound, gin.H{

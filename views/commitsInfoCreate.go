@@ -30,13 +30,13 @@ func CommitsInfoCreate(context *gin.Context) {
 	}
 	version := t.Release.Version
 	temp := ProjectsTable{}
-	res := db.Table("projects").First(&temp, "project_id = ? ", pid)
+	res := Db.Table("projects").First(&temp, "project_id = ? ", pid)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		context.Status(400)
 		return
 	}
 	temp1 := ReleasesTable{}
-	res1 := db.Table("releases").First(&temp1, "release_version = ?", version)
+	res1 := Db.Table("releases").First(&temp1, "release_version = ?", version)
 	if errors.Is(res1.Error, gorm.ErrRecordNotFound) {
 		context.Status(400)
 		return
@@ -50,7 +50,7 @@ func CommitsInfoCreate(context *gin.Context) {
 		temp2.Author = t.Commit[i].Author
 		temp2.Email = t.Commit[i].Email
 		temp2.Time = t.Commit[i].Email
-		fmt.Println(db.Table("commits").Create(&temp2).RowsAffected)
+		fmt.Println(Db.Table("commits").Create(&temp2).RowsAffected)
 	}
 	context.Status(200)
 

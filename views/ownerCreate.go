@@ -1,41 +1,48 @@
 package views
 
-/*import (
+import (
+	"errors"
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"net/http"
 	"strconv"
 	. "webService_Refactoring/modules"
 )
 
-func OwnerCreate2(context *gin.Context)  {
-	var t T3
+func OwnerCreate(context *gin.Context) {
+	var t GetConfidence
 	err := context.ShouldBind(&t)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
-			"error":err.Error(),
+			"err": err.Error(),
 		})
 		return
 	}
-	pid, err := strconv.Atoi(t.Project.Pid)
-	if err != nil {
-		context.Status(404)
-	}
-	release := t.Release
-	// report_methods = request.data['methods'] json中的数组传递还为完成解析
-	dsn := "host=localhost user=postgres password=123456 dbname=whobug2022 port=5433 " +
-		"sslmode=disable TimeZone=Asia/Shanghai"
-	db, err2 := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	pid, err2 := strconv.Atoi(t.Project.Pid)
 	if err2 != nil {
-		err2.Error()
+		context.Status(404)
+		return
 	}
-	// 数据库中查找pid（未查找到采用json报错）和release中的version未查找到采用json报错）
+	version := t.Release.Version
+	temp := ProjectsTable{}
+	res := db.Table("projects").First(&temp, "project_id = ?", pid)
+	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"error": "Project pid " + t.Project.Pid + " not exists",
+		})
+	}
+	temp1 := ReleasesTable{}
+	res1 := db.Table("releases").First(&temp1, "release_version = ?", version)
+	if errors.Is(res1.Error, gorm.ErrRecordNotFound) {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"error": "Release version " + t.Release.Version + " not exists",
+		})
+	}
+	methods := t.Method
+	n := len(methods)
+	// TODO nodes表（原objects表）还未确定
+	for i := 0; i < n; i++ {
+		return
+	}
 
-	context.JSON(http.StatusOK,gin.H{
-		"status":"ok",
-		"message":"",
-		"objects":"",
-	})
 }
-*/

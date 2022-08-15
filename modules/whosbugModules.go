@@ -44,16 +44,16 @@ type ReleaseModules struct {
 
 type UncountedObject struct {
 	Hash             string `form:"hash" json:"hash" binding:"required"`
-	ObjectId         string `form:"object_id" json:"pbject_id" binding:"required"`
-	OldObjectId      string `form:"old_object_id " json:"old_object_id " binding:"required"`
-	Parameters       string `form:"parameters " json:"parameters " binding:"required"`
-	StartLine        int    `form:"start_line   " json:"start_line   " binding:"required"`
-	Path             string `form:"path   " json:"path   " binding:"required"`
-	EndLine          int    `form:"end_line   " json:"end_line   " binding:"required"`
-	OldLineCount     int    `form:"old_line_count   " json:"old_line_count   " binding:"required"`
-	NewLineCount     int    `form:"new_line_count   " json:"new_line_count   " binding:"required"`
-	DeletedLineCount int    `form:"deleted_line_count   " json:"deleted_line_count   " binding:"required"`
-	AddedLineCount   int    `form:"added_line_count    " json:"added_line_count    " binding:"required"`
+	ObjectId         string `form:"object_id" json:"object_id" binding:"required"`
+	OldObjectId      string `form:"old_object_id " json:"old_object_id" binding:"required"`
+	Parameters       string `form:"parameters " json:"parameters" binding:"required"`
+	StartLine        int    `form:"start_line " json:"start_line" binding:"required"`
+	Path             string `form:"path" json:"object_path" binding:"required"`
+	EndLine          int    `form:"end_line" json:"end_line" binding:"required"`
+	OldLineCount     int    `form:"old_line_count" json:"old_line_count" binding:"required"`
+	NewLineCount     int    `form:"new_line_count" json:"new_line_count" binding:"required"`
+	DeletedLineCount int    `form:"deleted_line_count" json:"deleted_line_count" binding:"required"`
+	AddedLineCount   int    `form:"added_line_count" json:"added_line_count" binding:"required"`
 }
 
 type Object struct {
@@ -71,4 +71,22 @@ type T4 struct {
 	Project         Project           `json:"project"`
 	Release         Release           `json:"release"`
 	UncountedObject []UncountedObject `json:"uncountedObjects"`
+}
+
+type Method struct {
+	MethodId   string `json:"method_id"`
+	Filepath   string `json:"filepath"`
+	Parameters string `json:"parameters"`
+}
+
+type GetConfidence struct {
+	Project Project  `json:"project"`
+	Release Release  `json:"release"`
+	Method  []Method `json:"method"`
+}
+
+type JsonRes struct {
+	Status  string
+	Message string
+	Object  map[string]map[string]string
 }

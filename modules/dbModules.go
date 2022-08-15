@@ -48,7 +48,7 @@ type UncountedObjectsTable struct {
 	OldObjectId    string `gorm:"type:varchar(1000)"`
 	OldLine        int    `gorm:"type:int"`
 	NewLine        int    `gorm:"type:int"`
-	DeleteLine     int    `gorm:"type:int"`
+	DeletedLine    int    `gorm:"type:int"`
 	AddedLine      int    `gorm:"type:int"`
 	ReleaseTableId int    `gorm:"type:int"`
 	CommitTableId  int    `gorm:"type:varchar(200)"`

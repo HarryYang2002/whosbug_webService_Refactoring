@@ -22,9 +22,10 @@ func CommitsDiffsCreate(context *gin.Context) {
 		})
 		return
 	}
-	pid, err := strconv.Atoi(t.Project.Pid)
-	if err != nil {
+	pid, err2 := strconv.Atoi(t.Project.Pid)
+	if err2 != nil {
 		context.Status(404)
+		return
 	}
 	version := t.Release.Version
 	temp := ProjectsTable{}
@@ -41,15 +42,15 @@ func CommitsDiffsCreate(context *gin.Context) {
 	}
 	commit := CommitsTable{}
 	db.Table("commits").First(&commit, "release_table_id = ?", temp1.TableId)
-	temp2 := UncountedObjectsTable{}
 	n := len(t.UncountedObject)
 	for i := 0; i < n; i++ {
+		temp2 := UncountedObjectsTable{}
 		releaseId := temp1.TableId
 		commitId := commit.TableId
 		temp2.CommitTableId = int(commitId)
 		temp2.ReleaseTableId = int(releaseId)
 		temp2.OldObjectId = t.UncountedObject[i].OldObjectId
-		temp2.DeleteLine = t.UncountedObject[i].DeletedLineCount
+		temp2.DeletedLine = t.UncountedObject[i].DeletedLineCount
 		temp2.EndLine = t.UncountedObject[i].EndLine
 		temp2.Hash = t.UncountedObject[i].Hash
 		temp2.NewLine = t.UncountedObject[i].NewLineCount
@@ -58,7 +59,7 @@ func CommitsDiffsCreate(context *gin.Context) {
 		temp2.OldLine = t.UncountedObject[i].OldLineCount
 		temp2.Parameters = t.UncountedObject[i].Parameters
 		temp2.StartLine = t.UncountedObject[i].StartLine
-
+		temp2.AddedLine = t.UncountedObject[i].AddedLineCount
 		fmt.Println(db.Table("uncounted_objects").Create(&temp2).RowsAffected)
 	}
 

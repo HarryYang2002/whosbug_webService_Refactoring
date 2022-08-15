@@ -40,7 +40,3 @@ func main() {
 	}
 	r.Run(":8083")
 }
-
-func OwnerCreate(context *gin.Context) {
-
-}

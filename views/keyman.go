@@ -37,8 +37,8 @@ func GetBugOrigin(objects []ObjectInfo) (bugOringin []bugOriginInfo) {
 	for i, method := range methods {
 		var bugMethod bugOriginInfo
 		bugMethod.object = method
-		bugMethod.wrongRate = calculateComtribution(method.confidence, frameNumber[i], len(objects), relevanceDistance[i])
-		bugMethod.owners = calculateOwnerWeight(method.objectId)
+		bugMethod.wrongRate = CalculateComtribution(method.confidence, frameNumber[i], len(objects), relevanceDistance[i])
+		bugMethod.owners = CalculateOwnerWeight(method.objectId)
 		bugOringin = append(bugOringin, bugMethod)
 	}
 
@@ -49,7 +49,7 @@ func GetBugOrigin(objects []ObjectInfo) (bugOringin []bugOriginInfo) {
 //	@param addLines 代码新增行数
 //	@return	f(addLines) = (zoomY∗(−1∗arctan((𝑎𝑑𝑑−translation)/zoomX)+π/2)+adjust) 模型的结果
 //	@author Halokk 2022-08-12 14:25:46
-func calculateInnerModel(addLines int) float64 {
+func CalculateInnerModel(addLines int) float64 {
 	//  translation 横向平移单位数 ,zoomX 横向缩放比例 ,zoomY 纵向缩放比例 ,adjust 调节变量
 	translation, zoomX, zoomY, adjust := 200, 100, 0.3, 0.1966
 	return (math.Atan(float64((addLines-translation)/zoomX))*(-1)+math.Pi/2)*zoomY + adjust
@@ -62,9 +62,9 @@ func calculateInnerModel(addLines int) float64 {
 //  @param delete 删除的行数
 //  @param old 原本的行数
 //	@author Halokk 2022-08-12 15:08:03
-func calculateInnerValue(oldConfidence float64, add, new, delete, old int) (innerValue float64) {
+func CalculateInnerValue(oldConfidence float64, add, new, delete, old int) (innerValue float64) {
 	oldPart := (1.0 - float64(add)/float64(new)) * (1.0 - float64(delete)/float64(old)) * oldConfidence
-	newPart := float64(add) / float64(new) * calculateInnerModel(add)
+	newPart := float64(add) / float64(new) * CalculateInnerModel(add)
 	innerValue = oldPart + newPart
 	return
 }
@@ -73,13 +73,13 @@ func calculateInnerValue(oldConfidence float64, add, new, delete, old int) (inne
 //	@param	objectId
 //	@return comentropy 信息熵
 //	@author Halokk 2022-08-12 16:09:29
-func calculateComentropy(objectId string) (comentropy float64) {
+func CalculateComentropy(objectId string) (comentropy float64) {
 	node := getChain(objectId)
 	comentropy = math.Log(math.E + float64(len(node.childs)))
 	if len(node.childs) != 0 {
 		average := 0.0
 		for _, object := range node.childs {
-			average += calculateComentropy(object.objectId)
+			average += CalculateComentropy(object.objectId)
 		}
 		average /= float64(len(node.childs))
 		comentropy *= average
@@ -92,10 +92,10 @@ func calculateComentropy(objectId string) (comentropy float64) {
 //  @param comentropy 信息熵
 //	@return	confidence 置信度
 //	@author Halokk 2022-08-12 14:42:25
-func calculateConfidence(object UncalculateObjectInfo, oldConfidence float64) float64 {
-	innerValue := calculateInnerValue(oldConfidence, object.addedLineCount, object.newlineCount,
+func CalculateConfidence(object UncalculateObjectInfo, oldConfidence float64) float64 {
+	innerValue := CalculateInnerValue(oldConfidence, object.addedLineCount, object.newlineCount,
 		object.deletedlineCount, object.oldlineCount)
-	comentropy := calculateComentropy(object.objectId)
+	comentropy := CalculateComentropy(object.objectId)
 	return math.Pow(innerValue, comentropy)
 }
 
@@ -103,7 +103,7 @@ func calculateConfidence(object UncalculateObjectInfo, oldConfidence float64) fl
 //  @param oldConfidence 旧的置信度
 //  @return confidence 置信度
 //	@author Halokk 2022-08-12 16:24:15
-func hightenConfidence(oldConfidence float64) float64 {
+func HightenConfidence(oldConfidence float64) float64 {
 	return 1.2349 - math.Pow(0.2, oldConfidence-0.1)
 }
 
@@ -114,7 +114,7 @@ func hightenConfidence(oldConfidence float64) float64 {
 //  @param relevanceDistance 与直接错误函数的距离
 //  @param comtribution 对本次错误的贡献
 //	@author Halokk 2022-08-12 16:31:46
-func calculateComtribution(confidence float64, frameNumbers, totalNumbers, relevanceDistance int) float64 {
+func CalculateComtribution(confidence float64, frameNumbers, totalNumbers, relevanceDistance int) float64 {
 	return (1.0 / confidence) * (float64(frameNumbers) / float64(totalNumbers)) * (1.0 / float64(relevanceDistance))
 }
 
@@ -122,7 +122,7 @@ func calculateComtribution(confidence float64, frameNumbers, totalNumbers, relev
 //  @param objectId  函数ID
 //  @return	[author]weight
 //	@author Halokk 2022-08-12 17:37:36
-func calculateOwnerWeight(objectId string) (bugOwners map[string]float64) {
+func CalculateOwnerWeight(objectId string) (bugOwners map[string]float64) {
 	historys := getHistory(objectId)
 	for _, history := range historys {
 		commit, _ := history.commitHistory, history.objectHistory

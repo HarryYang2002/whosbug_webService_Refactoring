@@ -2,7 +2,6 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	. "webService_Refactoring/middlewear"
 	. "webService_Refactoring/utils"
 	. "webService_Refactoring/views"
 )
@@ -10,18 +9,18 @@ import (
 func InitRouter() {
 	gin.SetMode(AppMode)
 	r := gin.Default()
-	r.POST("/v1/api-token-auth", CreateToken)
+	r.POST("/api-token-auth", CreateToken)
 
-	api := r.Group("/v1/users")
+	api := r.Group("/api/v1/users")
 	{
 		api.POST("/", UserCreate)
-		r.Use(CheckToken())
+		//r.Use(CheckToken())
 		api.GET("/:id", UserRead)
 		api.PUT("/:id", UpdateUser)
 		api.PATCH("/:id", UpdateUserPartial)
 	}
 
-	commits := r.Group("/v1/commits")
+	commits := r.Group("/whosbug/commits")
 	{
 		commits.POST("/commits-info", CommitsInfoCreate)       //1
 		commits.POST("/delete_uncalculate", UncalculateDelete) //1
@@ -33,10 +32,10 @@ func InitRouter() {
 		commits.POST("/train_method", CommitsTrainMethodCreate) //1
 		commits.POST("/upload-done", CommitsUploadDoneCreate)   //1
 	}
-	r.POST("/v1/create-project-release", CreateProjectRelease) //1
-	r.POST("/v1/delete_all_related", AllRelatedDelete)         //1
-	r.GET("/v1/liveness", LivenessList)                        //1
-	r.POST("/v1/owner", OwnerCreate)                           //1
-	r.POST("/v1/releases/last", GetLastRelease)                //1
+	r.POST("/whosbug/create-project-release", CreateProjectRelease) //1
+	r.POST("/whosbug/delete_all_related", AllRelatedDelete)         //1
+	r.GET("/whosbug/liveness", LivenessList)                        //1
+	r.POST("/whosbug/owner", OwnerCreate)                           //1
+	r.POST("/whosbug/releases/last", GetLastRelease)                //1
 	r.Run(HttpPort)
 }

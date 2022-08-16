@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
-	"strconv"
 	. "webService_Refactoring/modules"
 )
 
@@ -20,10 +19,7 @@ func AllRelatedDelete(context *gin.Context) {
 		return
 	}
 	//提取pid、version
-	pid, err2 := strconv.Atoi(t.Project.Pid)
-	if err2 != nil {
-		context.Status(404)
-	}
+	pid := t.Project.Pid
 	version := t.Release.Version
 	//以pid去找
 	project := ProjectsTable{}
@@ -31,7 +27,7 @@ func AllRelatedDelete(context *gin.Context) {
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"error":  "Project get fails",
-			"detail": "no such project:" + strconv.Itoa(pid),
+			"detail": "no such project:" + pid,
 		})
 		return
 	}
@@ -45,8 +41,6 @@ func AllRelatedDelete(context *gin.Context) {
 		})
 		return
 	}
-	// TODO nodes表（原objects表）还需确定，先跳过
-
 	//删除uncounted_objects表中的内容在此做一下说明
 	//首先去releases表中去找对应的version，取出该条数据的table_id,此时可删除该条数据
 	//再去commits表中去找table_id对应的release_table_id的那条数据,此时可删除该条数据

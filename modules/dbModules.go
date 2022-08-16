@@ -27,14 +27,14 @@ type CommitsTable struct {
 
 type ProjectsTable struct {
 	TableId   uint64 `gorm:"primaryKey;auto_increment;type:serial"`
-	ProjectId int    `gorm:"type:int"`
+	ProjectId string `gorm:"type:varchar(200)"`
 }
 
 type ReleasesTable struct {
 	TableId        uint64 `gorm:"primaryKey;auto_increment;type:serial"`
 	ReleaseVersion string `gorm:"type:varchar(200)"`
 	LastCommitHash string `gorm:"type:varchar(1000)"`
-	ProjectId      int    `gorm:"type:int"`
+	ProjectId      string `gorm:"type:varchar(200)"`
 }
 
 type ObjectsTable struct {

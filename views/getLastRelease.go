@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
-	"strconv"
 	. "webService_Refactoring/modules"
 )
 
@@ -17,7 +16,7 @@ func GetLastRelease(c *gin.Context) {
 	temp := ReleasesTable{}
 	res := Db.Table("releases").Where("project_id = ?", id.Pid).First(&temp)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
-		info := "The project with pid = " + strconv.Itoa(id.Pid) + " does not exists."
+		info := "The project with pid = " + id.Pid + " does not exists."
 		c.JSON(http.StatusNotFound, gin.H{
 			"error": info,
 		})

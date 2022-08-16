@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
-	"strconv"
 	. "webService_Refactoring/modules"
 )
 
@@ -20,10 +19,7 @@ func CreateProjectRelease(context *gin.Context) {
 		})
 		return
 	}
-	pid, err := strconv.Atoi(t.Project.Pid)
-	if err != nil {
-		context.Status(404)
-	}
+	pid := t.Project.Pid
 	releaseVersion := t.Release.Version
 	releaseHash := t.Release.CommitHash
 	// 数据库查询pid，若存在且数据库中last_commit_hash 为传递的last_commit_hash

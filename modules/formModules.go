@@ -48,5 +48,5 @@ type UpdateUsers struct {
 }
 
 type ProjectId struct {
-	Pid int `form:"pid" binding:"required" validate:"number"`
+	Pid string `form:"pid" binding:"required"`
 }

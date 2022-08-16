@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
-	"strconv"
 	. "webService_Refactoring/modules"
 )
 
@@ -22,10 +21,7 @@ func CommitsTrainMethodCreate(context *gin.Context) {
 		})
 		return
 	}
-	pid, err := strconv.Atoi(t.Project.Pid)
-	if err != nil {
-		context.Status(404)
-	}
+	pid := t.Project.Pid
 	version := t.Release.Version
 	temp := ProjectsTable{}
 	res := Db.Table("projects").First(&temp, "project_id = ? ", pid)

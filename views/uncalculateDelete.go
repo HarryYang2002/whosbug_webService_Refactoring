@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
-	"strconv"
 	. "webService_Refactoring/modules"
 )
 
@@ -20,10 +19,7 @@ func UncalculateDelete(context *gin.Context) {
 		return
 	}
 	//提取pid、version
-	pid, err2 := strconv.Atoi(t.Project.Pid)
-	if err2 != nil {
-		context.Status(404)
-	}
+	pid := t.Project.Pid
 	version := t.Release.Version
 	//以pid去找
 	project := ProjectsTable{}
@@ -31,7 +27,7 @@ func UncalculateDelete(context *gin.Context) {
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"error":  "Project get fails",
-			"detail": "no such project:" + strconv.Itoa(pid),
+			"detail": "no such project:" + pid,
 		})
 		return
 	}

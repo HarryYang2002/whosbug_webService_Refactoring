@@ -19,7 +19,7 @@ const schemaProjects = `
 CREATE TABLE IF NOT EXISTS public.projects
 (
     table_id serial NOT NULL,
-    project_id integer NOT NULL,
+    project_id character varying(200) NOT NULL,
     PRIMARY KEY (table_id),
     CONSTRAINT "pid唯一确定一个项目" UNIQUE (project_id)
 );
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS public.releases
     table_id serial NOT NULL,
     release_version character varying(200) NOT NULL,
     last_commit_hash character varying(1000) NOT NULL,
-    project_id integer NOT NULL,
+    project_table_id character varying(200) NOT NULL,
     PRIMARY KEY (table_id),
     CONSTRAINT "pid和version唯一确定一个release" UNIQUE (release_version, project_id),
     CONSTRAINT "对应pid" FOREIGN KEY (project_id)

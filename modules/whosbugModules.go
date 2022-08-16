@@ -21,7 +21,6 @@ type Commit struct {
 type T struct {
 	Project Project
 	Release Release
-	// commit 暂定
 }
 
 type T2 struct {

@@ -3,7 +3,6 @@ package views
 import (
 	"errors"
 	"net/http"
-	"strconv"
 	. "webService_Refactoring/modules"
 
 	"github.com/gin-gonic/gin"
@@ -22,10 +21,7 @@ func CommitsUploadDoneCreate(context *gin.Context) {
 		})
 		return
 	}
-	pid, err := strconv.Atoi(t.Project.Pid)
-	if err != nil {
-		context.Status(404)
-	}
+	pid := t.Project.Pid
 	version := t.Release.Version
 	temp := ProjectsTable{}
 	res := Db.Table("projects").First(&temp, "project_id = ? ", pid)

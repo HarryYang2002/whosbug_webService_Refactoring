@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
-	"strconv"
 	. "webService_Refactoring/modules"
 )
 
@@ -19,11 +18,7 @@ func OwnerCreate(context *gin.Context) {
 		})
 		return
 	}
-	pid, err2 := strconv.Atoi(t.Project.Pid)
-	if err2 != nil {
-		context.Status(404)
-		return
-	}
+	pid := t.Project.Pid
 	version := t.Release.Version
 	temp := ProjectsTable{}
 	res := Db.Table("projects").First(&temp, "project_id = ?", pid)

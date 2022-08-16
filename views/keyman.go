@@ -122,12 +122,13 @@ func CalculateComtribution(confidence float64, frameNumbers, totalNumbers, relev
 //  @param objectId  函数ID
 //  @return	[author]weight
 //	@author Halokk 2022-08-12 17:37:36
-func CalculateOwnerWeight(objectId string) (bugOwners map[string]float64) {
+func CalculateOwnerWeight(objectId string) map[string]float64 {
+	bugOwners := make(map[string]float64, 0)
 	historys := getHistory(objectId)
 	for _, history := range historys {
 		commit, _ := history.commitHistory, history.objectHistory
 		owner := commit.commitAuthor
-		weight := 0.0
+		weight := 1.0
 		for _, notChangedPart := range historys {
 			if notChangedPart.commitHistory.commitHash != history.commitHistory.commitHash {
 				weight *= float64((notChangedPart.objectHistory.addedLineCount)+notChangedPart.objectHistory.deletedlineCount) /
@@ -138,11 +139,11 @@ func CalculateOwnerWeight(objectId string) (bugOwners map[string]float64) {
 				break
 			}
 		}
-		_, ok := bugOwners[owner]
-		if !ok {
+
+		if _, ok := bugOwners[owner]; !ok {
 			bugOwners[owner] = 0
 		}
 		bugOwners[owner] += weight
 	}
-	return
+	return bugOwners
 }

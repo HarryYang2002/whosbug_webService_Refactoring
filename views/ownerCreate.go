@@ -123,6 +123,7 @@ func OwnerCreate(context *gin.Context) {
 	}
 
 	OriginInfo := GetBugOrigin(objectInfos)
+	//fmt.Println(OriginInfo)
 	context.JSON(http.StatusOK, gin.H{
 		"ownerInfo": OriginInfo,
 	})

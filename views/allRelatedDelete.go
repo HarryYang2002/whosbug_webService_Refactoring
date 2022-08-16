@@ -33,7 +33,7 @@ func AllRelatedDelete(context *gin.Context) {
 	}
 	//以version去找
 	release := ReleasesTable{}
-	res2 := Db.Table("releases").Where("release_version = ? and project_id = ?", version, pid).First(&release)
+	res2 := Db.Table("releases").Where("release_version = ? and project_table_id = ?", version, project.TableId).First(&release)
 	if errors.Is(res2.Error, gorm.ErrRecordNotFound) {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"error":  "Release get fails",
@@ -41,7 +41,7 @@ func AllRelatedDelete(context *gin.Context) {
 		})
 		return
 	}
-	//删除uncounted_objects表中的内容在此做一下说明
+	//删除的内容在此做一下说明
 	//首先去releases表中去找对应的version，取出该条数据的table_id,此时可删除该条数据
 	//再去commits表中去找table_id对应的release_table_id的那条数据,此时可删除该条数据
 	//再以该条数据的table_id去uncounted_objects表中相应的commit_table_id

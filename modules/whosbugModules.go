@@ -81,7 +81,7 @@ type Method struct {
 type GetConfidence struct {
 	Project Project  `json:"project"`
 	Release Release  `json:"release"`
-	Method  []Method `json:"method"`
+	Method  []Method `json:"methods"`
 }
 
 type JsonRes struct {

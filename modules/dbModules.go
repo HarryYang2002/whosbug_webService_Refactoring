@@ -34,7 +34,7 @@ type ReleasesTable struct {
 	TableId        uint64 `gorm:"primaryKey;auto_increment;type:serial"`
 	ReleaseVersion string `gorm:"type:varchar(200)"`
 	LastCommitHash string `gorm:"type:varchar(1000)"`
-	ProjectId      string `gorm:"type:varchar(200)"`
+	ProjectTableId int    `gorm:"type:int"`
 }
 
 type ObjectsTable struct {

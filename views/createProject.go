@@ -34,7 +34,7 @@ func CreateProjectRelease(context *gin.Context) {
 	res2 := Db.Table("releases").Where("release_version = ? "+
 		"and last_commit_hash = ?", releaseVersion, releaseHash).First(&release)
 	if errors.Is(res2.Error, gorm.ErrRecordNotFound) {
-		release.ProjectId = pid
+		release.ProjectTableId = int(project.TableId)
 		release.ReleaseVersion = releaseVersion
 		release.LastCommitHash = releaseHash
 		fmt.Println(Db.Table("releases").Create(&release).RowsAffected)

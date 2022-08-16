@@ -67,11 +67,13 @@ type TreeNode struct {
 //  @return []historyInfo
 //  返回的切片要按时间顺序排，最新的commit及其对应object放在索引0
 func getHistory(objectId string) (result []HistoryInfo) {
+
 	return
 }
 
 //  @param objectId 函数的id
 //  @return	chainNode 该函数所在的定义链的根结点
 func getChain(objectId string) (node TreeNode) {
+
 	return node
 }

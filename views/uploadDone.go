@@ -2,6 +2,7 @@ package views
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	. "webService_Refactoring/modules"
 
@@ -21,6 +22,7 @@ func CommitsUploadDoneCreate(context *gin.Context) {
 		})
 		return
 	}
+	fmt.Println(t)
 	pid := t.Project.Pid
 	version := t.Release.Version
 	temp := ProjectsTable{}
@@ -77,7 +79,7 @@ func CommitsUploadDoneCreate(context *gin.Context) {
 			temp4.ObjectTableId = int(temp2[i].TableId) //?
 			temp4.ObjectParameters = temp2[i].Parameters
 			temp4.OldConfidence = 0
-			Db.Table("nodes").Create(&temp4)
+			fmt.Println(Db.Table("nodes").Create(&temp4).RowsAffected)
 
 		}
 

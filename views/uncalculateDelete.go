@@ -33,7 +33,7 @@ func UncalculateDelete(context *gin.Context) {
 	}
 	//以version去找
 	release := ReleasesTable{}
-	res2 := Db.Table("releases").Where("release_version = ? and project_id = ?", version, pid).First(&release)
+	res2 := Db.Table("releases").Where("release_version = ? and project_table_id = ?", version, project.TableId).First(&release)
 	if errors.Is(res2.Error, gorm.ErrRecordNotFound) {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"error":  "Release get fails",

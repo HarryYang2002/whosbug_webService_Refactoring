@@ -36,8 +36,10 @@ func OwnerCreate(context *gin.Context) {
 		})
 		return
 	}
+	releaseTableId := temp1.TableId
 	methods := t.Method
 	n := len(methods)
+	fmt.Println(n)
 
 	jsonResult := JsonRes{}
 	var params []NodesTable
@@ -46,20 +48,22 @@ func OwnerCreate(context *gin.Context) {
 		filePath := methods[i].Filepath
 		parameters := methods[i].Parameters
 		commitDemo := CommitsTable{}
-		Db.Table("commits").First(&commitDemo, "release_version = ?", version)
+		Db.Table("commits").First(&commitDemo, "release_table_id = ?", releaseTableId)
 		commitTableId := commitDemo.TableId
 		var nodes []NodesTable
 		//数据库中查找所有符合条件的数据
 		Db.Table("nodes").Find(&nodes, "commit_table_id in (?)", commitTableId)
 		if len(nodes) == 0 {
 			context.Status(400)
-			return
+			continue
 		}
 		//第一次筛选
 		var methods2 []NodesTable
 		for x := 0; x < len(nodes); x++ {
-			if nodes[i].CurrentObjectId == methodId {
-				methods2 = append(methods2, nodes[i])
+			if nodes[x].CurrentObjectId == methodId {
+				methods2 = append(methods2, nodes[x])
+				fmt.Println("888", methods2)
+				fmt.Println(len(methods2))
 			}
 		}
 		if len(methods2) == 0 {
@@ -72,8 +76,8 @@ func OwnerCreate(context *gin.Context) {
 		//第二次筛选
 		var path []NodesTable
 		for x := 0; x < len(nodes); x++ {
-			if nodes[i].ObjectPath == filePath {
-				path = append(path, nodes[i])
+			if nodes[x].ObjectPath == filePath {
+				path = append(path, nodes[x])
 			}
 		}
 		if len(path) == 0 {
@@ -86,8 +90,8 @@ func OwnerCreate(context *gin.Context) {
 		}
 		//第三次筛选
 		for x := 0; x < len(path); x++ {
-			if path[i].ObjectParameters == parameters {
-				params = append(params, path[i])
+			if path[x].ObjectParameters == parameters {
+				params = append(params, path[x])
 			}
 		}
 		if len(params) == 0 {

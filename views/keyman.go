@@ -29,7 +29,7 @@ func GetBugOrigin(objects []ObjectInfo) (bugOringin []bugOriginInfo) {
 		} else {
 			methods = append(methods, object)
 			frameNumber = append(frameNumber, 1)
-			relevanceDistance = append(relevanceDistance, dist)
+			relevanceDistance = append(relevanceDistance, dist+1)
 		}
 	}
 

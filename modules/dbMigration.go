@@ -31,11 +31,11 @@ CREATE TABLE IF NOT EXISTS public.releases
     table_id serial NOT NULL,
     release_version character varying(200) NOT NULL,
     last_commit_hash character varying(1000) NOT NULL,
-    project_table_id character varying(200) NOT NULL,
+    project_table_id integer NOT NULL,
     PRIMARY KEY (table_id),
-    CONSTRAINT "pid和version唯一确定一个release" UNIQUE (release_version, project_id),
-    CONSTRAINT "对应pid" FOREIGN KEY (project_id)
-        REFERENCES public.projects (project_id) MATCH SIMPLE
+    CONSTRAINT "pid和version唯一确定一个release" UNIQUE (release_version, project_table_id),
+    CONSTRAINT "对应pid" FOREIGN KEY (project_table_id)
+        REFERENCES public.projects (table_id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE CASCADE
         NOT VALID

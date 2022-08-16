@@ -25,7 +25,6 @@ func CommitsDiffsCreate(context *gin.Context) {
 	pid, err2 := strconv.Atoi(t.Project.Pid)
 	if err2 != nil {
 		context.Status(404)
-		return
 	}
 	version := t.Release.Version
 	temp := ProjectsTable{}
@@ -42,13 +41,11 @@ func CommitsDiffsCreate(context *gin.Context) {
 	}
 	commit := CommitsTable{}
 	Db.Table("commits").First(&commit, "release_table_id = ?", temp1.TableId)
-	fmt.Println(commit.TableId)
 	n := len(t.UncountedObject)
-	fmt.Println(n)
+	releaseId := temp1.TableId
+	commitId := commit.TableId
 	for i := 0; i < n; i++ {
 		temp2 := ObjectsTable{}
-		releaseId := temp1.TableId
-		commitId := commit.TableId
 		temp2.CommitTableId = int(commitId)
 		temp2.ReleaseTableId = int(releaseId)
 		temp2.FatherObjectId = t.UncountedObject[i].OldObjectId

@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS public.nodes
     object_path character varying(1000) NOT NULL,
     object_parameters character varying(10000) NOT NULL DEFAULT '',
     current_object_id character varying(1000) NOT NULL,
-    father_object_id character varying(1000) NOT NULL,
+    father_object_id character varying(1000),
     old_confidence double precision NOT NULL DEFAULT 0.0,
     new_confidence double precision NOT NULL DEFAULT 0.0,
     commit_table_id bigint NOT NULL,
@@ -119,18 +119,33 @@ CREATE TABLE IF NOT EXISTS public.nodes
         NOT VALID
 );
 `
-
-const indexObjectPath = "create index path_idx on nodes(object_path);"
+const (
+	indexProProjectId      = "create index ppid on projects(project_id);"
+	indexReaProjectTableId = "create index rptid on releases(project_table_id);"
+	indexComReleaseTableId = "create index crtid on commits(release_table_id);"
+	indexObjReleaseTableId = "create index ortid on objects(release_table_id);"
+	indexObjCommitTableId  = "create index octid on objects(commit_table_id);"
+	indexNodMerge          = "create index n_idx on nodes(object_parameters, object_path, current_object_id);"
+	// indexObjectPath        = "create index path_idx on nodes(object_path);" // 不一定会让速度更快吧，索引太多了
+	indexNodCommitTableId = "create index nctid on nodes(commit_table_id);"
+	indexNodObjectTableId = "create index notid on nodes(object_table_id);"
+)
 
 func Create() {
-	_, err = Db.Raw(schemaUsers).Rows() // 执行原生SQL语句建表
-	_, err = Db.Raw(schemaProjects).Rows()
-	_, err = Db.Raw(schemaReleases).Rows()
-	_, err = Db.Raw(schemaCommits).Rows()
-	_, err = Db.Raw(schemaObjects).Rows()
-	_, err = Db.Raw(schemaNodes).Rows()
-	_, err = Db.Raw(indexObjectPath).Rows()
-	if err != nil {
-		err.Error()
-	}
+	Db.Exec(schemaUsers) // 执行原生SQL语句
+	Db.Exec(schemaProjects)
+	Db.Exec(schemaReleases)
+	Db.Exec(schemaCommits)
+	Db.Exec(schemaObjects)
+	Db.Exec(schemaNodes)
+
+	Db.Exec(indexProProjectId)
+	Db.Exec(indexReaProjectTableId)
+	Db.Exec(indexComReleaseTableId)
+	Db.Exec(indexObjReleaseTableId)
+	Db.Exec(indexObjCommitTableId)
+	Db.Exec(indexNodMerge)
+	// Db.Exec(indexObjectPath)
+	Db.Exec(indexNodCommitTableId)
+	Db.Exec(indexNodObjectTableId)
 }

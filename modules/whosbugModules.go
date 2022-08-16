@@ -48,12 +48,12 @@ type UncountedObject struct {
 	OldObjectId      string `form:"old_object_id " json:"old_object_id" binding:"required"`
 	Parameters       string `form:"parameters " json:"parameters" binding:"required"`
 	StartLine        int    `form:"start_line " json:"start_line" binding:"required"`
-	Path             string `form:"path" json:"object_path" binding:"required"`
+	Path             string `form:"path" json:"path" binding:"required"`
 	EndLine          int    `form:"end_line" json:"end_line" binding:"required"`
 	OldLineCount     int    `form:"old_line_count" json:"old_line_count" binding:"required"`
-	NewLineCount     int    `form:"new_line_count" json:"new_line_count" binding:"required"`
-	DeletedLineCount int    `form:"deleted_line_count" json:"deleted_line_count" binding:"required"`
-	AddedLineCount   int    `form:"added_line_count" json:"added_line_count" binding:"required"`
+	NewLineCount     int    `form:"new_line_count" json:"current_line_count" binding:"required"`
+	DeletedLineCount int    `form:"deleted_line_count" json:"removed_line_count" binding:"required"`
+	AddedLineCount   int    `form:"added_line_count" json:"added_new_line_count" binding:"required"`
 }
 
 type Object struct {
@@ -70,7 +70,7 @@ type Object struct {
 type T4 struct {
 	Project         Project           `json:"project"`
 	Release         Release           `json:"release"`
-	UncountedObject []UncountedObject `json:"uncountedObjects"`
+	UncountedObject []UncountedObject `json:"objects"`
 }
 
 type Method struct {

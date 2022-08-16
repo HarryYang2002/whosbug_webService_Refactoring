@@ -43,7 +43,7 @@ func judge_object(temp2 ObjectsTable, nodes []NodesTable) (int, []NodesTable, in
 	//第三次筛选
 	var params []NodesTable
 	for x := 0; x < len(path); x++ {
-		if path[x].ObjectsParameters == temp2.Parameters {
+		if path[x].ObjectParameters == temp2.Parameters {
 			params = append(params, path[x])
 			paramsnum = append(paramsnum, x)
 			i = x

@@ -31,14 +31,14 @@ type ProjectsTable struct {
 }
 
 type ReleasesTable struct {
-	TableId        uint64 `gorm:"primaryKey;auto_increment;type:bigserial"`
+	TableId        uint64 `gorm:"primaryKey;auto_increment;type:serial"`
 	ReleaseVersion string `gorm:"type:varchar(200)"`
 	LastCommitHash string `gorm:"type:varchar(1000)"`
 	ProjectId      int    `gorm:"type:int"`
 }
 
 type ObjectsTable struct {
-	TableId         uint64 `gorm:"primaryKey;auto_increment;type:bigserial"`
+	TableId         uint64 `gorm:"primaryKey;auto_increment;type:serial"`
 	Parameters      string `gorm:"type:varchar(10000)"`
 	Hash            string `gorm:"type:varchar(1000)"`
 	StartLine       int    `gorm:"type:int"`
@@ -55,13 +55,13 @@ type ObjectsTable struct {
 }
 
 type NodesTable struct {
-	TableId           uint64  `gorm:"primaryKey;auto_increment;type:bigserial"`
-	ObjectPath        string  `gorm:"type:varchar(1000)"`
-	ObjectsParameters string  `gorm:"type:varchar(10000)"`
-	CurrentObjectId   string  `gorm:"type:varchar(1000)"`
-	FatherObjectId    string  `gorm:"type:varchar(1000)"`
-	OldConfidence     float64 `gorm:"type:double"`
-	NewConfidence     float64 `gorm:"type:double"`
-	CommitTableId     int     `gorm:"type:varchar(200)"`
-	ObjectTableId     int     `gorm:"type:int"`
+	TableId          uint64  `gorm:"primaryKey;auto_increment;type:serial"`
+	ObjectPath       string  `gorm:"type:varchar(1000)"`
+	ObjectParameters string  `gorm:"type:varchar(10000)"`
+	CurrentObjectId  string  `gorm:"type:varchar(1000)"`
+	FatherObjectId   string  `gorm:"type:varchar(1000)"`
+	OldConfidence    float64 `gorm:"type:double"`
+	NewConfidence    float64 `gorm:"type:double"`
+	CommitTableId    int     `gorm:"type:varchar(200)"`
+	ObjectTableId    int     `gorm:"type:int"`
 }

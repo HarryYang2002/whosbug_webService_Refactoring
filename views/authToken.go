@@ -3,7 +3,6 @@ package views
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"log"
@@ -36,13 +35,13 @@ func CreateToken(context *gin.Context) {
 		"token": MD5(token),
 	})
 
-	dbCreateUser := UsersTable{
-		UserId:       CreateUUID(),
-		UserName:     loginForm.Username,
-		UserToken:    MD5(token),
-		UserPassword: loginForm.Password,
-	}
-	fmt.Println(Db.Table("users").Create(&dbCreateUser).RowsAffected)
+	//dbCreateUser := UsersTable{
+	//	UserId:       CreateUUID(),
+	//	UserName:     loginForm.Username,
+	//	UserToken:    MD5(token),
+	//	UserPassword: loginForm.Password,
+	//}
+	//fmt.Println(Db.Table("users").Create(&dbCreateUser).RowsAffected)
 
 }
 

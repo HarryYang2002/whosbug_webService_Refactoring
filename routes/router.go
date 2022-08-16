@@ -10,7 +10,7 @@ import (
 func InitRouter() {
 	gin.SetMode(AppMode)
 	r := gin.Default()
-	r.POST("/api-token-auth", CreateToken)
+	r.POST("/v1/api-token-auth", CreateToken)
 
 	api := r.Group("/v1/users")
 	{
@@ -21,22 +21,22 @@ func InitRouter() {
 		api.PATCH("/:id", UpdateUserPartial)
 	}
 
-	commits := r.Group("/commits")
+	commits := r.Group("/v1/commits")
 	{
-		commits.POST("/commits-info", CommitsInfoCreate)
-		commits.POST("/delete_uncalculate", UncalculateDelete)
-		commits.POST("/diffs", CommitsDiffsCreate)
+		commits.POST("/commits-info", CommitsInfoCreate)       //1
+		commits.POST("/delete_uncalculate", UncalculateDelete) //1
+		commits.POST("/diffs", CommitsDiffsCreate)             //1
 		//review 暂时不重构
 		commits.POST("/reviewers", CommitsReviewersCreate)
 		commits.POST("/rules/", CommitsRulesCreate)
 		//
-		commits.POST("/train_method", CommitsTrainMethodCreate)
-		commits.POST(".upload-done", CommitsUploadDoneCreate)
+		commits.POST("/train_method", CommitsTrainMethodCreate) //1
+		commits.POST("/upload-done", CommitsUploadDoneCreate)   //1
 	}
-	r.POST("create-project-release", CreateProjectRelease)
-	r.POST("delete_all_related", AllRelatedDelete)
-	r.GET("liveness", LivenessList)
-	r.POST("owner", OwnerCreate)
-	r.POST("releases/last", GetLastRelease)
+	r.POST("/v1/create-project-release", CreateProjectRelease) //1
+	r.POST("/v1/delete_all_related", AllRelatedDelete)         //1
+	r.GET("/v1/liveness", LivenessList)                        //1
+	r.POST("/v1/owner", OwnerCreate)                           //1
+	r.POST("/v1/releases/last", GetLastRelease)                //1
 	r.Run(HttpPort)
 }

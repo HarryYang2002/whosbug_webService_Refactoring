@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"net/http"
 	. "webService_Refactoring/modules"
@@ -80,12 +79,6 @@ func UpdateUserPartial(context *gin.Context) {
 	newfn := context.PostForm("first_name")
 	newln := context.PostForm("last_name")
 
-	dsn := "host=localhost user=postgres password=123456 Dbname=whobug2022 port=5433 " +
-		"sslmode=disable TimeZone=Asia/Shanghai"
-	Db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		err.Error()
-	}
 	res := Db.Table("users").First(&temp, "user_id = ?", searchId)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		context.Status(401)

@@ -91,7 +91,7 @@ func OwnerCreate(context *gin.Context) {
 		}
 		//第三次筛选
 		for x := 0; x < len(path); x++ {
-			if path[i].ObjectsParameters == parameters {
+			if path[i].ObjectParameters == parameters {
 				params = append(params, path[i])
 			}
 		}

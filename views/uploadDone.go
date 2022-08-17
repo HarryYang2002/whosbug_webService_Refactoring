@@ -22,6 +22,7 @@ func CommitsUploadDoneCreate(context *gin.Context) {
 		})
 		return
 	}
+	fmt.Println(t)
 	pid := t.Project.Pid
 	version := t.Release.Version
 	temp := ProjectsTable{}
@@ -41,10 +42,10 @@ func CommitsUploadDoneCreate(context *gin.Context) {
 	var temp2 []ObjectsTable
 	Db.Table("objects").Find(&temp2)
 	n := len(temp2)
-	var nodes []NodesTable
-	Db.Table("nodes").Find(&nodes)
 
 	for i := 0; i < n; i++ {
+		var nodes []NodesTable
+		Db.Table("nodes").Find(&nodes)
 		temp3 := UncalculateObjectInfo{}
 		temp3.addedLineCount = temp2[i].AddedLine
 		temp3.deletedlineCount = temp2[i].DeletedLine
@@ -56,20 +57,23 @@ func CommitsUploadDoneCreate(context *gin.Context) {
 		temp3.oldlineCount = temp2[i].OldLine
 		temp3.parameters = temp2[i].Parameters
 		temp3.startLine = temp2[i].StartLine
-		var nodes1 []NodesTable
+		//var nodes1 []NodesTable
 		var tnum int
 
-		num, nodes1, tnum := judge_object(temp2[i], nodes)
+		num, tnum := judge_object(temp2[i], nodes)
+		fmt.Println("n:", tnum)
 		if num != 0 { //有object
 			if judge_change(temp3) == 1 { //没改
+				t := nodes[tnum].OldConfidence
 				nodes[tnum].OldConfidence = nodes[tnum].NewConfidence
-				nodes[tnum].NewConfidence = HightenConfidence(nodes1[0].NewConfidence)
+				nodes[tnum].NewConfidence = HightenConfidence(t)
 				fmt.Println(Db.Table("nodes").Where("table_id = ?", tnum).Update("old_confidence", nodes[tnum].OldConfidence))
 				fmt.Println(Db.Table("nodes").Where("table_id = ?", tnum).Update("new_confidence", nodes[tnum].NewConfidence))
 				//Db.M(&).Update("name", "hello")
 			} else {
+				t1 := nodes[tnum].OldConfidence
 				nodes[tnum].OldConfidence = nodes[tnum].NewConfidence
-				nodes[tnum].NewConfidence = CalculateConfidence(temp3, nodes1[0].NewConfidence)
+				nodes[tnum].NewConfidence = CalculateConfidence(temp3, t1)
 				fmt.Println(Db.Table("nodes").Where("table_id = ?", tnum).Update("old_confidence", nodes[tnum].OldConfidence))
 				fmt.Println(Db.Table("nodes").Where("table_id = ?", tnum).Update("new_confidence", nodes[tnum].NewConfidence))
 			}
@@ -88,7 +92,10 @@ func CommitsUploadDoneCreate(context *gin.Context) {
 			temp4.ObjectNewLine = temp2[i].NewLine
 			temp4.ObjectOldLine = temp2[i].OldLine
 			fmt.Println(Db.Table("nodes").Create(&temp4).RowsAffected)
+
 		}
+
 	}
 	context.Status(200)
+
 }

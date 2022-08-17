@@ -4,10 +4,11 @@ import (
 	"math"
 )
 
-//  @Description: 根据崩溃堆栈解析出来的objects切片进行计算，返回出错率前五高的函数及每个函数前五名责任人
-//  @param  objects 解析出来的堆栈函数切片
-//  @return  bugOrigin 本次错误的主要责任人
-//  @author  Halokk
+// GetBugOrigin
+// @Description: 根据崩溃堆栈解析出来的objects切片进行计算，返回出错率前五高的函数及每个函数前五名责任人
+// @param  objects 解析出来的堆栈函数切片
+// @return  bugOrigin 本次错误的主要责任人
+// @author  Halokk
 func GetBugOrigin(objects []ObjectInfo) (bugOringin []bugOriginInfo) {
 	var methods []ObjectInfo
 	var frameNumber []int
@@ -40,6 +41,9 @@ func GetBugOrigin(objects []ObjectInfo) (bugOringin []bugOriginInfo) {
 		bugMethod.wrongRate = CalculateComtribution(method.confidence, frameNumber[i], len(objects), relevanceDistance[i])
 		bugMethod.owners = CalculateOwnerWeight(method.objectId)
 		bugOringin = append(bugOringin, bugMethod)
+		if len(bugOringin) == 5 {
+			break
+		}
 	}
 
 	return bugOringin
@@ -139,11 +143,13 @@ func CalculateOwnerWeight(objectId string) map[string]float64 {
 				break
 			}
 		}
-
 		if _, ok := bugOwners[owner]; !ok {
 			bugOwners[owner] = 0
 		}
 		bugOwners[owner] += weight
+		if len(bugOwners) == 5 {
+			break
+		}
 	}
 	return bugOwners
 }

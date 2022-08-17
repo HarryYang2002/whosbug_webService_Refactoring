@@ -22,9 +22,9 @@ func InitRouter() {
 
 	commits := r.Group("/v1/commits")
 	{
-		commits.POST("/commits-info", CommitsInfoCreate)       //1
-		commits.POST("/delete_uncalculate", UncalculateDelete) //1
-		commits.POST("/diffs", CommitsDiffsCreate)             //1
+		commits.POST("/commits-info", CommitsInfoCreate) //1
+		//commits.POST("/delete_uncalculate", UncalculateDelete) //1
+		commits.POST("/diffs", CommitsDiffsCreate) //1
 		//review 暂时不重构
 		commits.POST("/reviewers", CommitsReviewersCreate)
 		commits.POST("/rules/", CommitsRulesCreate)

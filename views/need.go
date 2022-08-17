@@ -15,16 +15,16 @@ type CommitInfo struct {
 
 type ObjectInfo struct {
 	//hash             string  //Object所属的Commit
-	objectId    string  //Object的函数唯一标识符
-	oldObjectId string  //Object的父类唯一表示符
-	confidence  float64 //置信度
-	parameters  string  //方法的参数特征
+	objectId    string  `json:"object_id"`     //Object的函数唯一标识符
+	oldObjectId string  `json:"old_object_id"` //Object的父类唯一表示符
+	confidence  float64 `json:"confidence"`    //置信度
+	parameters  string  `json:"parameters"`    //方法的参数特征
 	//startLine        int     //起始行
 	//endLine          int     //结束行
-	oldlineCount     int //旧行数
-	newlineCount     int //新行数
-	deletedlineCount int //移除行数
-	addedLineCount   int //新增行数
+	oldlineCount     int `json:"oldline_count"`     //旧行数
+	newlineCount     int `json:"newline_count"`     //新行数
+	deletedlineCount int `json:"deletedline_count"` //移除行数
+	addedLineCount   int `json:"added_line_count"`  //新增行数
 }
 
 type UncalculateObjectInfo struct {

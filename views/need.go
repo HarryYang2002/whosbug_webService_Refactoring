@@ -109,14 +109,25 @@ func getHistory(objectId string) (result []HistoryInfo) {
 //  @param objectId 函数的id
 //  @return	chainNode 该函数所在的定义链的根结点
 func getChain(objectId string) (node TreeNode) {
-	//var chlids []ObjectInfo
-	//nodeModule := NodesTable{}
-	//Db.Table("nodes").First(&nodeModule, "current_object_id = ?", objectId)
-	//if nodeModule.FatherObjectId != "" {
-	//	child := ObjectInfo{}
-	//	child.hash =
-	//	id := nodeModule.FatherObjectId
-	//	Db.Table("nodes").First(&nodeModule, "current_object_id = ?", id)
-	//}
-	return
+	var childs []ObjectInfo
+	var father ObjectInfo
+	// 循环，结束条件为该条数据没有FatherObjectId
+	for {
+		nodeModule := NodesTable{}
+		Db.Table("nodes").First(&nodeModule, "current_object_id = ?", objectId)
+		//存在FatherObjectId，将其加入childs切片
+		if nodeModule.FatherObjectId != "" {
+			child := ObjectInfo{}
+
+			fatherId := nodeModule.FatherObjectId
+			Db.Table("nodes").First(&nodeModule, "current_object_id = ?", fatherId)
+			childs = append(childs, child)
+		} else {
+			//father = nodeModule
+			break
+		}
+	}
+	node.childs = childs
+	node.object = father
+	return node
 }

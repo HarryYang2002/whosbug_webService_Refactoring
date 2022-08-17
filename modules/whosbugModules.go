@@ -62,8 +62,7 @@ type Object struct {
 	OldConfidence float64
 	StartLine     int
 	EndLine       int
-	//commit string ForeignKey 暂定
-	parameters string
+	parameters    string
 }
 
 type T4 struct {

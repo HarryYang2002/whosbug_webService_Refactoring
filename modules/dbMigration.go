@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS public.nodes
     old_confidence double precision NOT NULL DEFAULT 0.0,
     new_confidence double precision NOT NULL DEFAULT 0.0,
     commit_table_id bigint NOT NULL,
-    object_table_id bigint NOT NULL,
+    object_table_id bigint,
     object_old_line integer NOT NULL DEFAULT 0,
     object_new_line integer NOT NULL DEFAULT 0,
     object_ad_line integer NOT NULL DEFAULT 0,

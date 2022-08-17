@@ -20,7 +20,7 @@ func judge_object(temp2 ObjectsTable, nodes []NodesTable) (int, []NodesTable, in
 	for x := 0; x < len(nodes); x++ {
 		if nodes[x].CurrentObjectId == temp2.CurrentObjectId {
 			methods = append(methods, nodes[x])
-			nodesnum = append(nodesnum, x)
+			nodesnum = append(nodesnum, x) //3 5 7 9
 		}
 	}
 	if len(methods) == 0 {
@@ -29,10 +29,10 @@ func judge_object(temp2 ObjectsTable, nodes []NodesTable) (int, []NodesTable, in
 	}
 	//第二次筛选
 	var path []NodesTable
-	for x := 0; x < len(nodes); x++ {
-		if nodes[x].ObjectPath == temp2.ObjectPath {
+	for x := 0; x < len(methods); x++ {
+		if methods[x].ObjectPath == temp2.ObjectPath {
 			path = append(path, nodes[x])
-			pathsnum = append(pathsnum, x)
+			pathsnum = append(pathsnum, x) //1 3
 		}
 	}
 	if len(path) == 0 {
@@ -45,7 +45,7 @@ func judge_object(temp2 ObjectsTable, nodes []NodesTable) (int, []NodesTable, in
 	for x := 0; x < len(path); x++ {
 		if path[x].ObjectParameters == temp2.Parameters {
 			params = append(params, path[x])
-			paramsnum = append(paramsnum, x)
+			paramsnum = append(paramsnum, x) //1
 			i = x
 		}
 	}
@@ -66,5 +66,4 @@ func judge_change(object UncalculateObjectInfo) int {
 	} else {
 		return 0
 	}
-
 }

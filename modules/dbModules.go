@@ -66,6 +66,6 @@ type NodesTable struct {
 	ObjectTableId    int     `gorm:"type:int"`
 	ObjectNewLine    int     `gorm:"type:int"`
 	ObjectOldLine    int     `gorm:"type:int"`
-	ObjectAddLine    int     `gorm:"type:int"`
-	ObjectDeleteLine int     `gorm:"type:int"`
+	ObjectAdLine     int     `gorm:"type:int"`
+	ObjectDeLine     int     `gorm:"type:int"`
 }

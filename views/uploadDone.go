@@ -22,7 +22,6 @@ func CommitsUploadDoneCreate(context *gin.Context) {
 		})
 		return
 	}
-	fmt.Println(t)
 	pid := t.Project.Pid
 	version := t.Release.Version
 	temp := ProjectsTable{}
@@ -64,10 +63,15 @@ func CommitsUploadDoneCreate(context *gin.Context) {
 		if num != 0 { //有object
 			if judge_change(temp3) == 1 { //没改
 				nodes[tnum].OldConfidence = nodes[tnum].NewConfidence
-				nodes[tnum].NewConfidence = HightenConfidence(nodes1[num].NewConfidence)
+				nodes[tnum].NewConfidence = HightenConfidence(nodes1[0].NewConfidence)
+				fmt.Println(Db.Table("nodes").Where("table_id = ?", tnum).Update("old_confidence", nodes[tnum].OldConfidence))
+				fmt.Println(Db.Table("nodes").Where("table_id = ?", tnum).Update("new_confidence", nodes[tnum].NewConfidence))
+				//Db.M(&).Update("name", "hello")
 			} else {
 				nodes[tnum].OldConfidence = nodes[tnum].NewConfidence
-				nodes[tnum].NewConfidence = CalculateConfidence(temp3, nodes1[num].NewConfidence)
+				nodes[tnum].NewConfidence = CalculateConfidence(temp3, nodes1[0].NewConfidence)
+				fmt.Println(Db.Table("nodes").Where("table_id = ?", tnum).Update("old_confidence", nodes[tnum].OldConfidence))
+				fmt.Println(Db.Table("nodes").Where("table_id = ?", tnum).Update("new_confidence", nodes[tnum].NewConfidence))
 			}
 		} else {
 			temp4 := NodesTable{}
@@ -79,11 +83,12 @@ func CommitsUploadDoneCreate(context *gin.Context) {
 			temp4.ObjectTableId = int(temp2[i].TableId) //?
 			temp4.ObjectParameters = temp2[i].Parameters
 			temp4.OldConfidence = 0
+			temp4.ObjectAdLine = temp2[i].AddedLine
+			temp4.ObjectDeLine = temp2[i].DeletedLine
+			temp4.ObjectNewLine = temp2[i].NewLine
+			temp4.ObjectOldLine = temp2[i].OldLine
 			fmt.Println(Db.Table("nodes").Create(&temp4).RowsAffected)
-
 		}
-
 	}
 	context.Status(200)
-
 }

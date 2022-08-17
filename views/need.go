@@ -59,9 +59,9 @@ type HistoryInfo struct {
 }
 
 type bugOriginInfo struct {
-	object    ObjectInfo
-	wrongRate float64
-	owners    map[string]float64
+	object    ObjectInfo         `json:"object"`
+	wrongRate float64            `json:"wrong_rate"`
+	owners    map[string]float64 `json:"owners"`
 }
 
 type TreeNode struct {
@@ -106,39 +106,45 @@ func getHistory(objectId string) (result []HistoryInfo) {
 
 }
 
+//TODO 数据库中查询不到old_object_id，已经确定为ci插件传递错误
+
 //  @param objectId 函数的id
 //  @return	chainNode 该函数所在的定义链的根结点
 func getChain(objectId string) (node TreeNode) {
 	var childs []ObjectInfo
 	var father ObjectInfo
-	// 循环，结束条件为该条数据没有FatherObjectId
-	for {
-		nodeModule := NodesTable{}
-		Db.Table("nodes").First(&nodeModule, "current_object_id = ?", objectId)
-		//存在FatherObjectId，将其加入childs切片
-		if nodeModule.FatherObjectId != "" {
-			child := ObjectInfo{}
-			child.addedLineCount = nodeModule.ObjectAddLine
-			child.objectId = nodeModule.CurrentObjectId
-			child.newlineCount = nodeModule.ObjectNewLine
-			child.oldlineCount = nodeModule.ObjectOldLine
-			child.deletedlineCount = nodeModule.ObjectDeleteLine
-			child.oldObjectId = nodeModule.FatherObjectId
-			child.parameters = nodeModule.ObjectParameters
-			child.confidence = nodeModule.NewConfidence
-			childs = append(childs, child)
-		} else {
-			father.addedLineCount = nodeModule.ObjectAddLine
-			father.deletedlineCount = nodeModule.ObjectDeleteLine
-			father.confidence = nodeModule.NewConfidence
-			father.objectId = nodeModule.CurrentObjectId
-			father.objectId = nodeModule.FatherObjectId
-			father.parameters = nodeModule.ObjectParameters
-			father.newlineCount = nodeModule.ObjectNewLine
-			father.oldlineCount = nodeModule.ObjectOldLine
-			break
-		}
-	}
+	//循环，结束条件为该条数据没有FatherObjectId
+	//for {
+	//	nodeModule := NodesTable{}
+	//	res := Db.Table("nodes").First(&nodeModule, "current_object_id = ?", objectId)
+	//	if errors.Is(res.Error,gorm.ErrRecordNotFound) {
+	//
+	//	}
+	//	//存在FatherObjectId，将其加入childs切片
+	//	if nodeModule.FatherObjectId != "" {
+	//		child := ObjectInfo{}
+	//		child.addedLineCount = nodeModule.ObjectAdLine
+	//		child.objectId = nodeModule.CurrentObjectId
+	//		child.newlineCount = nodeModule.ObjectNewLine
+	//		child.oldlineCount = nodeModule.ObjectOldLine
+	//		child.deletedlineCount = nodeModule.ObjectDeLine
+	//		child.oldObjectId = nodeModule.FatherObjectId
+	//		child.parameters = nodeModule.ObjectParameters
+	//		child.confidence = nodeModule.NewConfidence
+	//		childs = append(childs, child)
+	//		objectId = nodeModule.FatherObjectId
+	//	} else {
+	//		father.addedLineCount = nodeModule.ObjectAdLine
+	//		father.deletedlineCount = nodeModule.ObjectDeLine
+	//		father.confidence = nodeModule.NewConfidence
+	//		father.objectId = nodeModule.CurrentObjectId
+	//		father.objectId = nodeModule.FatherObjectId
+	//		father.parameters = nodeModule.ObjectParameters
+	//		father.newlineCount = nodeModule.ObjectNewLine
+	//		father.oldlineCount = nodeModule.ObjectOldLine
+	//		break
+	//	}
+	//}
 	node.childs = childs
 	node.object = father
 	return node

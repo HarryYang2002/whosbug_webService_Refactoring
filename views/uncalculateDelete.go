@@ -52,6 +52,7 @@ func UncalculateDelete(context *gin.Context) {
 	if res5.Error != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Delete error",
+			"err":   res5.Error.Error(),
 		})
 		return
 	}

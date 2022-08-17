@@ -1,6 +1,7 @@
 package views
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -39,7 +40,6 @@ func OwnerCreate(context *gin.Context) {
 	releaseTableId := temp1.TableId
 	methods := t.Method
 	n := len(methods)
-	fmt.Println(n)
 
 	jsonResult := JsonRes{}
 	var params []NodesTable
@@ -73,9 +73,9 @@ func OwnerCreate(context *gin.Context) {
 		}
 		//第二次筛选
 		var path []NodesTable
-		for x := 0; x < len(nodes); x++ {
+		for x := 0; x < len(methods2); x++ {
 			if methods2[x].ObjectPath == filePath {
-				path = append(path, nodes[x])
+				path = append(path, methods2[x])
 			}
 		}
 		if len(path) == 0 {
@@ -110,13 +110,16 @@ func OwnerCreate(context *gin.Context) {
 		objectInfo.parameters = params[i].ObjectParameters
 		objectInfo.newlineCount = params[i].ObjectNewLine
 		objectInfo.oldlineCount = params[i].ObjectOldLine
-		objectInfo.deletedlineCount = params[i].ObjectDeleteLine
-		objectInfo.addedLineCount = params[i].ObjectAddLine
+		objectInfo.deletedlineCount = params[i].ObjectDeLine
+		objectInfo.addedLineCount = params[i].ObjectAdLine
 		objectInfos = append(objectInfos, objectInfo)
 	}
 
 	OriginInfo := GetBugOrigin(objectInfos)
+	fmt.Println(OriginInfo)
+	marshal, _ := json.Marshal(OriginInfo)
+	fmt.Println(marshal)
 	context.JSON(http.StatusOK, gin.H{
-		"ownerInfo": OriginInfo,
+		"ownerInfo": marshal,
 	})
 }

@@ -119,7 +119,7 @@ CREATE TABLE IF NOT EXISTS public.nodes
     CONSTRAINT "方便返回objectHistory" FOREIGN KEY (object_table_id)
         REFERENCES public.objects (table_id) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+        ON DELETE SET NULL
         NOT VALID
 );
 `

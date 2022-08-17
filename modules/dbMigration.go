@@ -105,6 +105,10 @@ CREATE TABLE IF NOT EXISTS public.nodes
     new_confidence double precision NOT NULL DEFAULT 0.0,
     commit_table_id bigint NOT NULL,
     object_table_id bigint NOT NULL,
+    object_st_line integer NOT NULL DEFAULT 0,
+    object_nd_line integer NOT NULL DEFAULT 0,
+    object_ad_line integer NOT NULL DEFAULT 0,
+    object_de_line integer NOT NULL DEFAULT 0,
     PRIMARY KEY (table_id),
     UNIQUE (object_path, object_parameters, current_object_id),
     CONSTRAINT "方便返回commitHistory" FOREIGN KEY (commit_table_id)
@@ -115,7 +119,7 @@ CREATE TABLE IF NOT EXISTS public.nodes
     CONSTRAINT "方便返回objectHistory" FOREIGN KEY (object_table_id)
         REFERENCES public.objects (table_id) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE CASCADE
+        ON DELETE NO ACTION
         NOT VALID
 );
 `

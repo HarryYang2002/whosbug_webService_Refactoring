@@ -13,18 +13,18 @@ type CommitInfo struct {
 	commitTime   string
 }
 
-type ObjectInfo struct { //objects
-	hash             string  //Object所属的Commit
-	objectId         string  //Object的函数唯一标识符  现版本
-	oldObjectId      string  //Object的父类唯一表示符  老
-	confidence       float64 //置信度   nodes表
-	parameters       string  //方法的参数特征
-	startLine        int     //起始行
-	endLine          int     //结束行
-	oldlineCount     int     //旧行数
-	newlineCount     int     //新行数
-	deletedlineCount int     //移除行数
-	addedLineCount   int     //新增行数
+type ObjectInfo struct {
+	//hash             string  //Object所属的Commit
+	objectId    string  //Object的函数唯一标识符
+	oldObjectId string  //Object的父类唯一表示符
+	confidence  float64 //置信度
+	parameters  string  //方法的参数特征
+	//startLine        int     //起始行
+	//endLine          int     //结束行
+	oldlineCount     int //旧行数
+	newlineCount     int //新行数
+	deletedlineCount int //移除行数
+	addedLineCount   int //新增行数
 }
 
 type UncalculateObjectInfo struct {
@@ -118,12 +118,24 @@ func getChain(objectId string) (node TreeNode) {
 		//存在FatherObjectId，将其加入childs切片
 		if nodeModule.FatherObjectId != "" {
 			child := ObjectInfo{}
-
-			fatherId := nodeModule.FatherObjectId
-			Db.Table("nodes").First(&nodeModule, "current_object_id = ?", fatherId)
+			child.addedLineCount = nodeModule.ObjectAddLine
+			child.objectId = nodeModule.CurrentObjectId
+			child.newlineCount = nodeModule.ObjectNewLine
+			child.oldlineCount = nodeModule.ObjectOldLine
+			child.deletedlineCount = nodeModule.ObjectDeleteLine
+			child.oldObjectId = nodeModule.FatherObjectId
+			child.parameters = nodeModule.ObjectParameters
+			child.confidence = nodeModule.NewConfidence
 			childs = append(childs, child)
 		} else {
-			//father = nodeModule
+			father.addedLineCount = nodeModule.ObjectAddLine
+			father.deletedlineCount = nodeModule.ObjectDeleteLine
+			father.confidence = nodeModule.NewConfidence
+			father.objectId = nodeModule.CurrentObjectId
+			father.objectId = nodeModule.FatherObjectId
+			father.parameters = nodeModule.ObjectParameters
+			father.newlineCount = nodeModule.ObjectNewLine
+			father.oldlineCount = nodeModule.ObjectOldLine
 			break
 		}
 	}

@@ -62,8 +62,6 @@ func OwnerCreate(context *gin.Context) {
 		for x := 0; x < len(nodes); x++ {
 			if nodes[x].CurrentObjectId == methodId {
 				methods2 = append(methods2, nodes[x])
-				fmt.Println("888", methods2)
-				fmt.Println(len(methods2))
 			}
 		}
 		if len(methods2) == 0 {
@@ -76,7 +74,7 @@ func OwnerCreate(context *gin.Context) {
 		//第二次筛选
 		var path []NodesTable
 		for x := 0; x < len(nodes); x++ {
-			if nodes[x].ObjectPath == filePath {
+			if methods2[x].ObjectPath == filePath {
 				path = append(path, nodes[x])
 			}
 		}
@@ -106,19 +104,14 @@ func OwnerCreate(context *gin.Context) {
 	var objectInfos []ObjectInfo
 	for i := 0; i < len(params); i++ {
 		objectInfo := ObjectInfo{}
-		objects := ObjectsTable{}
-		Db.Table("objects").First(&objects, "table_id = ?", params[i].ObjectTableId)
-		objectInfo.hash = objects.Hash
-		objectInfo.objectId = objects.CurrentObjectId
-		objectInfo.oldObjectId = objects.FatherObjectId
+		objectInfo.objectId = params[i].CurrentObjectId
+		objectInfo.oldObjectId = params[i].FatherObjectId
 		objectInfo.confidence = params[i].NewConfidence
-		objectInfo.parameters = objects.Parameters
-		objectInfo.startLine = objects.StartLine
-		objectInfo.endLine = objects.EndLine
-		objectInfo.oldlineCount = objects.OldLine
-		objectInfo.newlineCount = objects.NewLine
-		objectInfo.deletedlineCount = objects.DeletedLine
-		objectInfo.addedLineCount = objects.AddedLine
+		objectInfo.parameters = params[i].ObjectParameters
+		objectInfo.newlineCount = params[i].ObjectNewLine
+		objectInfo.oldlineCount = params[i].ObjectOldLine
+		objectInfo.deletedlineCount = params[i].ObjectDeleteLine
+		objectInfo.addedLineCount = params[i].ObjectAddLine
 		objectInfos = append(objectInfos, objectInfo)
 	}
 

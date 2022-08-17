@@ -62,6 +62,10 @@ type NodesTable struct {
 	FatherObjectId   string  `gorm:"type:varchar(1000)"`
 	OldConfidence    float64 `gorm:"type:double"`
 	NewConfidence    float64 `gorm:"type:double"`
-	CommitTableId    int     `gorm:"type:varchar(200)"`
+	CommitTableId    int     `gorm:"type:int"`
 	ObjectTableId    int     `gorm:"type:int"`
+	ObjectNewLine    int     `gorm:"type:int"`
+	ObjectOldLine    int     `gorm:"type:int"`
+	ObjectAddLine    int     `gorm:"type:int"`
+	ObjectDeleteLine int     `gorm:"type:int"`
 }

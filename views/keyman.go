@@ -17,7 +17,7 @@ func GetBugOrigin(objects []ObjectInfo) (bugOringin []bugOriginInfo) {
 	for dist, object := range objects {
 		flag, index := false, 0
 		for i, method := range methods {
-			if object.hash == method.hash {
+			if object.objectId == method.objectId {
 				flag = true
 				index = i
 				break

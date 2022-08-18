@@ -73,8 +73,8 @@ type TreeNode struct {
 //  @return []historyInfo
 //  返回的切片要按时间顺序排，最新的commit及其对应object放在索引0
 func getHistory(objectId string) (result []HistoryInfo) {
-	var temp []ObjectsTable
-	res2 := Db.Table("objects").Where("current_object_id = ? ", objectId).Find(&temp)
+	var temp []NodesTable
+	res2 := Db.Table("nodes").Where("current_object_id = ? ", objectId).Find(&temp)
 	if errors.Is(res2.Error, gorm.ErrRecordNotFound) {
 		return
 	}
@@ -88,10 +88,10 @@ func getHistory(objectId string) (result []HistoryInfo) {
 		}
 		var temp3 ObjectHistoryInfo
 		var temp4 CommitInfo
-		temp3.addedLineCount = temp[i].AddedLine
-		temp3.deletedlineCount = temp[i].DeletedLine
-		temp3.newlineCount = temp[i].NewLine
-		temp3.oldlineCount = temp[i].OldLine
+		temp3.addedLineCount = temp[i].ObjectAdLine
+		temp3.deletedlineCount = temp[i].ObjectDeLine
+		temp3.newlineCount = temp[i].ObjectNewLine
+		temp3.oldlineCount = temp[i].ObjectOldLine
 		temp4.commitAuthor = temp1.Author
 		temp4.commitEmail = temp1.Email
 		temp4.commitHash = temp1.Hash

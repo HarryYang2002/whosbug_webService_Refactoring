@@ -66,7 +66,7 @@ type bugOriginInfo struct {
 
 type TreeNode struct {
 	object ObjectInfo
-	childs []ObjectInfo
+	childs []TreeNode
 }
 
 //  @param objectId
@@ -111,7 +111,7 @@ func getHistory(objectId string) (result []HistoryInfo) {
 //  @param objectId 函数的id
 //  @return	chainNode 该函数所在的定义链的根结点
 func getChain(objectId string) (node TreeNode) {
-	var childs []ObjectInfo
+	var childs []TreeNode
 	var father ObjectInfo
 	//循环，结束条件为该条数据没有FatherObjectId
 	//for {

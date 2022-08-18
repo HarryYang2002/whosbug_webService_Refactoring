@@ -22,9 +22,9 @@ func InitRouter() {
 
 	commits := r.Group("/v1/commits")
 	{
-		commits.POST("/commits-info", CommitsInfoCreate) //1
-		//commits.POST("/delete_uncalculate", UncalculateDelete) //1
-		commits.POST("/diffs", CommitsDiffsCreate) //1
+		commits.POST("/commits-info", CommitsInfoCreate)       //1
+		commits.POST("/delete_uncalculate", UncalculateDelete) //1
+		commits.POST("/diffs", CommitsDiffsCreate)             //1
 		//review 暂时不重构
 		commits.POST("/reviewers", CommitsReviewersCreate)
 		commits.POST("/rules/", CommitsRulesCreate)
@@ -33,9 +33,9 @@ func InitRouter() {
 		commits.POST("/upload-done", CommitsUploadDoneCreate)   //1
 	}
 	r.POST("/v1/create-project-release", CreateProjectRelease) //1
-	//r.POST("/v1/delete_all_related", AllRelatedDelete)         //1
-	r.GET("/v1/liveness", LivenessList)         //1
-	r.POST("/v1/owner", OwnerCreate)            //1
-	r.POST("/v1/releases/last", GetLastRelease) //1
+	r.POST("/v1/delete_all_related", AllRelatedDelete)         //1
+	r.GET("/v1/liveness", LivenessList)                        //1
+	r.POST("/v1/owner", OwnerCreate)                           //1
+	r.POST("/v1/releases/last", GetLastRelease)                //1
 	r.Run(HttpPort)
 }

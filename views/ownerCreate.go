@@ -116,8 +116,25 @@ func OwnerCreate(context *gin.Context) {
 
 	OriginInfo := GetBugOrigin(objectInfos)
 	fmt.Println(OriginInfo)
+	var knum []string
+	var vnum []float64
+	for k, v := range OriginInfo {
+		knum = append(knum, k)
+		vnum = append(vnum, v)
+	}
+	type testss struct {
+		Name   string  `json:"name" binding:"required"`
+		Weight float64 `json:"weight" binding:"required"`
+	}
+	var tt []testss
+	var tt1 testss
+	for i := 0; i < len(OriginInfo); i++ {
+		tt1.Name = knum[i]
+		tt1.Weight = vnum[i]
+		tt = append(tt, tt1)
+	}
 	context.JSON(http.StatusOK, gin.H{
-		"success": 123,
+		"owner": tt,
 	})
 	//for i := 0; i < len(OriginInfo); i++ {
 	//	var knum []string

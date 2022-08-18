@@ -14,17 +14,14 @@ type CommitInfo struct {
 }
 
 type ObjectInfo struct {
-	//hash             string  //Object所属的Commit
-	objectId    string  `json:"object_id"`     //Object的函数唯一标识符
-	oldObjectId string  `json:"old_object_id"` //Object的父类唯一表示符
-	confidence  float64 `json:"confidence"`    //置信度
-	parameters  string  `json:"parameters"`    //方法的参数特征
-	//startLine        int     //起始行
-	//endLine          int     //结束行
-	oldlineCount     int `json:"oldline_count"`     //旧行数
-	newlineCount     int `json:"newline_count"`     //新行数
-	deletedlineCount int `json:"deletedline_count"` //移除行数
-	addedLineCount   int `json:"added_line_count"`  //新增行数
+	objectId         string  `json:"object_id"`         //Object的函数唯一标识符
+	oldObjectId      string  `json:"old_object_id"`     //Object的父类唯一表示符
+	confidence       float64 `json:"confidence"`        //置信度
+	parameters       string  `json:"parameters"`        //方法的参数特征
+	oldlineCount     int     `json:"oldline_count"`     //旧行数
+	newlineCount     int     `json:"newline_count"`     //新行数
+	deletedlineCount int     `json:"deletedline_count"` //移除行数
+	addedLineCount   int     `json:"added_line_count"`  //新增行数
 }
 
 type UncalculateObjectInfo struct {
@@ -65,6 +62,7 @@ type bugOriginInfo struct {
 }
 
 type TreeNode struct {
+	sonNum int
 	object ObjectInfo
 	childs []TreeNode
 }
@@ -106,46 +104,55 @@ func getHistory(objectId string) (result []HistoryInfo) {
 
 }
 
-//TODO 数据库中查询不到old_object_id，已经确定为ci插件传递错误
-
 //  @param objectId 函数的id
 //  @return	chainNode 该函数所在的定义链的根结点
 func getChain(objectId string) (node TreeNode) {
-	var childs []TreeNode
-	var father ObjectInfo
-	//循环，结束条件为该条数据没有FatherObjectId
-	//for {
-	//	nodeModule := NodesTable{}
-	//	res := Db.Table("nodes").First(&nodeModule, "current_object_id = ?", objectId)
-	//	if errors.Is(res.Error,gorm.ErrRecordNotFound) {
-	//
+	temp := NodesTable{}
+	Db.Table("nodes").First(&temp, "current_object_id = ?", objectId)
+	node.object = ObjectInfo{temp.CurrentObjectId, temp.FatherObjectId, temp.NewConfidence,
+		temp.ObjectParameters, temp.ObjectOldLine, temp.ObjectNewLine,
+		temp.ObjectDeLine, temp.ObjectAdLine}
+	var tempChilds []TreeNode
+	Db.Table("nodes").Find(&tempChilds, "father_object_id in (?)", objectId)
+	for i := range tempChilds {
+		node.childs = append(node.childs, getChain(tempChilds[i].object.objectId))
+	}
+	return
+	//var childs []TreeNode
+	//var father ObjectInfo
+	//var temp []NodesTable
+	//Db.Table("nodes").Find(&temp, "father_object_id in (?)", objectId)
+	//node.sonNum = len(temp)
+	//if len(temp) == 0{
+	//	return
+	//}else {
+	//	for i := 0; i < len(temp); i++ {
+	//		var node1 TreeNode
+	//		node1.object.oldObjectId = temp[i].FatherObjectId
+	//		node1.object.objectId = temp[i].CurrentObjectId
+	//		node1.object.addedLineCount = temp[i].ObjectAdLine
+	//		node1.object.deletedlineCount = temp[i].ObjectDeLine
+	//		node1.object.newlineCount = temp[i].ObjectNewLine
+	//		node1.object.oldlineCount = temp[i].ObjectOldLine
+	//		node1.object.parameters =temp[i].ObjectParameters
+	//		node1.object.confidence = temp[i].NewConfidence
+	//		childs = append(childs, node1)
+	//		node1=getChain(childs[i].object.objectId)
 	//	}
-	//	//存在FatherObjectId，将其加入childs切片
-	//	if nodeModule.FatherObjectId != "" {
-	//		child := ObjectInfo{}
-	//		child.addedLineCount = nodeModule.ObjectAdLine
-	//		child.objectId = nodeModule.CurrentObjectId
-	//		child.newlineCount = nodeModule.ObjectNewLine
-	//		child.oldlineCount = nodeModule.ObjectOldLine
-	//		child.deletedlineCount = nodeModule.ObjectDeLine
-	//		child.oldObjectId = nodeModule.FatherObjectId
-	//		child.parameters = nodeModule.ObjectParameters
-	//		child.confidence = nodeModule.NewConfidence
-	//		childs = append(childs, child)
-	//		objectId = nodeModule.FatherObjectId
-	//	} else {
-	//		father.addedLineCount = nodeModule.ObjectAdLine
-	//		father.deletedlineCount = nodeModule.ObjectDeLine
-	//		father.confidence = nodeModule.NewConfidence
-	//		father.objectId = nodeModule.CurrentObjectId
-	//		father.objectId = nodeModule.FatherObjectId
-	//		father.parameters = nodeModule.ObjectParameters
-	//		father.newlineCount = nodeModule.ObjectNewLine
-	//		father.oldlineCount = nodeModule.ObjectOldLine
-	//		break
-	//	}
+	//	node.childs = childs
+	//	node.object = father
 	//}
-	node.childs = childs
-	node.object = father
-	return node
+	//fatherNode := NodesTable{}  //处理第一个传进来的节点
+	//Db.Table("nodes").First(&fatherNode,"current_object_id = ?",objectId)
+	//father.objectId = fatherNode.CurrentObjectId
+	//father.oldObjectId = fatherNode.FatherObjectId
+	//father.addedLineCount = fatherNode.ObjectAdLine
+	//father.deletedlineCount = fatherNode.ObjectDeLine
+	//father.newlineCount = fatherNode.ObjectNewLine
+	//father.oldlineCount = fatherNode.ObjectOldLine
+	//father.parameters = fatherNode.ObjectParameters
+	//father.confidence = fatherNode.NewConfidence
+	//node.childs = childs
+	//node.object = father
+	return
 }

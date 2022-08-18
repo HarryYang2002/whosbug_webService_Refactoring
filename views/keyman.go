@@ -8,9 +8,11 @@ import (
 //  @param  objects 解析出来的堆栈函数切片
 //  @return  bugOrigin 本次错误的主要责任人
 //  @author  Halokk
-func GetBugOrigin(objects []ObjectInfo) (bugOringin []bugOriginInfo) {
+func GetBugOrigin(objects []ObjectInfo) map[string]float64 {
 	var methods []ObjectInfo
+	var bugOringin []bugOriginInfo
 	var frameNumber, relevanceDistance []int
+	bugOwnersList := make(map[string]float64, 0)
 	//  筛选出堆栈中每个函数并统计出现在堆栈中的次数
 	for dist, object := range objects {
 		flag, index := false, 0
@@ -30,33 +32,23 @@ func GetBugOrigin(objects []ObjectInfo) (bugOringin []bugOriginInfo) {
 	}
 
 	//  计算出错率
-	var bugOringinTemp []bugOriginInfo
 	for i, method := range methods {
 		bugMethod := bugOriginInfo{method,
 			CalculateComtribution(method.confidence, frameNumber[i], len(objects), relevanceDistance[i]),
 			CalculateOwnerWeight(method.objectId)}
-		bugOringinTemp = append(bugOringinTemp, bugMethod)
+		bugOringin = append(bugOringin, bugMethod)
 	}
-	//降序，采用冒泡排序，但是只需要出错率前五名
-	number := 0
-	for i := len(bugOringinTemp) - 1; i > 0; i-- {
-		for j := i - 1; j >= 0; j-- {
-			if bugOringinTemp[j].wrongRate < bugOringinTemp[j+1].wrongRate {
-				bugOringinTemp[j], bugOringinTemp[j+1] = bugOringinTemp[j+1], bugOringinTemp[j]
+
+	//
+	for _, temp := range bugOringin {
+		for key, value := range temp.owners {
+			if _, ok := bugOwnersList[key]; !ok {
+				bugOwnersList[key] = 0.0
 			}
-		}
-		number++
-		if number == 5 {
-			break
+			bugOwnersList[key] += value
 		}
 	}
-	for i := range bugOringinTemp {
-		if i > 4 {
-			break
-		}
-		bugOringin = append(bugOringin, bugOringinTemp[i])
-	}
-	return bugOringin
+	return bugOwnersList
 }
 
 // CalculateInnerModel innerValue的计算模型

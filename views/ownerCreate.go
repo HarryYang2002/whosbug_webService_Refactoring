@@ -115,30 +115,34 @@ func OwnerCreate(context *gin.Context) {
 	}
 
 	OriginInfo := GetBugOrigin(objectInfos)
-	for i := 0; i < len(OriginInfo); i++ {
-		var knum []string
-		var vnum []float64
-		for k, v := range OriginInfo[i].owners {
-			knum = append(knum, k)
-			vnum = append(vnum, v)
-		}
-		context.JSON(http.StatusBadRequest, gin.H{
-			"objectId":         OriginInfo[i].object.objectId,
-			"oldObjectId":      OriginInfo[i].object.oldObjectId,
-			"parameters":       OriginInfo[i].object.parameters,
-			"addedLineCount":   OriginInfo[i].object.addedLineCount,
-			"deletedlineCount": OriginInfo[i].object.deletedlineCount,
-			"newlineCount":     OriginInfo[i].object.newlineCount,
-			"oldlineCount":     OriginInfo[i].object.oldlineCount,
-			"confidence":       OriginInfo[i].object.confidence,
-			"wrongRate":        OriginInfo[i].wrongRate,
-		})
-		for j := 0; j < len(OriginInfo[i].owners); j++ {
-			context.JSON(http.StatusOK, gin.H{
-				"name":   knum[j],
-				"weight": vnum[j],
-			})
-		}
-		context.String(200, "\n \n")
-	}
+	fmt.Println(OriginInfo)
+	context.JSON(http.StatusOK, gin.H{
+		"success": 123,
+	})
+	//for i := 0; i < len(OriginInfo); i++ {
+	//	var knum []string
+	//	var vnum []float64
+	//	for k, v := range OriginInfo[i].owners {
+	//		knum = append(knum, k)
+	//		vnum = append(vnum, v)
+	//	}
+	//	context.JSON(http.StatusBadRequest, gin.H{
+	//		"objectId":         OriginInfo[i].object.objectId,
+	//		"oldObjectId":      OriginInfo[i].object.oldObjectId,
+	//		"parameters":       OriginInfo[i].object.parameters,
+	//		"addedLineCount":   OriginInfo[i].object.addedLineCount,
+	//		"deletedlineCount": OriginInfo[i].object.deletedlineCount,
+	//		"newlineCount":     OriginInfo[i].object.newlineCount,
+	//		"oldlineCount":     OriginInfo[i].object.oldlineCount,
+	//		"confidence":       OriginInfo[i].object.confidence,
+	//		"wrongRate":        OriginInfo[i].wrongRate,
+	//	})
+	//	for j := 0; j < len(OriginInfo[i].owners); j++ {
+	//		context.JSON(http.StatusOK, gin.H{
+	//			"name":   knum[j],
+	//			"weight": vnum[j],
+	//		})
+	//	}
+	//	context.String(200, "\n \n")
+	//}
 }

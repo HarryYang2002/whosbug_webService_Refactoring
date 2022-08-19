@@ -106,53 +106,16 @@ func getHistory(objectId string) (result []HistoryInfo) {
 
 //  @param objectId 函数的id
 //  @return	chainNode 该函数所在的定义链的根结点
-func getChain(objectId string) (node TreeNode) {
-	temp := NodesTable{}
-	Db.Table("nodes").First(&temp, "current_object_id = ?", objectId)
-	node.object = ObjectInfo{temp.CurrentObjectId, temp.FatherObjectId, temp.NewConfidence,
-		temp.ObjectParameters, temp.ObjectOldLine, temp.ObjectNewLine,
-		temp.ObjectDeLine, temp.ObjectAdLine}
-	var tempChilds []TreeNode
-	Db.Table("nodes").Find(&tempChilds, "father_object_id in (?)", objectId)
+func getChain(objectID string) (node TreeNode) {
+	temp := ObjectsTable{}
+	Db.Table("objects").First(&temp, "current_object_id = ?", objectID)
+	node.object = ObjectInfo{temp.CurrentObjectId, temp.FatherObjectId, 0,
+		temp.Parameters, temp.OldLine, temp.NewLine,
+		temp.DeletedLine, temp.AddedLine}
+	var tempChilds []ObjectsTable
+	Db.Table("objects").Find(&tempChilds, "father_object_id in (?)", objectID)
 	for i := range tempChilds {
-		node.childs = append(node.childs, getChain(tempChilds[i].object.objectId))
+		node.childs = append(node.childs, getChain(tempChilds[i].CurrentObjectId))
 	}
-	return
-	//var childs []TreeNode
-	//var father ObjectInfo
-	//var temp []NodesTable
-	//Db.Table("nodes").Find(&temp, "father_object_id in (?)", objectId)
-	//node.sonNum = len(temp)
-	//if len(temp) == 0{
-	//	return
-	//}else {
-	//	for i := 0; i < len(temp); i++ {
-	//		var node1 TreeNode
-	//		node1.object.oldObjectId = temp[i].FatherObjectId
-	//		node1.object.objectId = temp[i].CurrentObjectId
-	//		node1.object.addedLineCount = temp[i].ObjectAdLine
-	//		node1.object.deletedlineCount = temp[i].ObjectDeLine
-	//		node1.object.newlineCount = temp[i].ObjectNewLine
-	//		node1.object.oldlineCount = temp[i].ObjectOldLine
-	//		node1.object.parameters =temp[i].ObjectParameters
-	//		node1.object.confidence = temp[i].NewConfidence
-	//		childs = append(childs, node1)
-	//		node1=getChain(childs[i].object.objectId)
-	//	}
-	//	node.childs = childs
-	//	node.object = father
-	//}
-	//fatherNode := NodesTable{}  //处理第一个传进来的节点
-	//Db.Table("nodes").First(&fatherNode,"current_object_id = ?",objectId)
-	//father.objectId = fatherNode.CurrentObjectId
-	//father.oldObjectId = fatherNode.FatherObjectId
-	//father.addedLineCount = fatherNode.ObjectAdLine
-	//father.deletedlineCount = fatherNode.ObjectDeLine
-	//father.newlineCount = fatherNode.ObjectNewLine
-	//father.oldlineCount = fatherNode.ObjectOldLine
-	//father.parameters = fatherNode.ObjectParameters
-	//father.confidence = fatherNode.NewConfidence
-	//node.childs = childs
-	//node.object = father
 	return
 }

@@ -45,7 +45,7 @@ func UserCreate(context *gin.Context) {
 		UserId:        userUUID,
 		UserName:      registerForm.Username,
 		UserToken:     token,
-		UserPassword:  MD5(registerForm.Password), //暂定md5密文存储密码，存在一些问题，与导师商量后再定
+		UserPassword:  MD5(registerForm.Password),
 		UserFirstName: registerForm.Firstname,
 		UserLastName:  registerForm.Lastname,
 		UserEmail:     registerForm.Email,

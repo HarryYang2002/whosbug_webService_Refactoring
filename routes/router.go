@@ -2,6 +2,7 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
+	. "webService_Refactoring/middlewear"
 	. "webService_Refactoring/utils"
 	. "webService_Refactoring/views"
 )
@@ -14,7 +15,7 @@ func InitRouter() {
 	api := r.Group("/v1/users")
 	{
 		api.POST("/", UserCreate)
-		//r.Use(CheckToken())
+		r.Use(CheckToken())
 		api.GET("/:id", UserRead)
 		api.PUT("/:id", UpdateUser)
 		api.PATCH("/:id", UpdateUserPartial)

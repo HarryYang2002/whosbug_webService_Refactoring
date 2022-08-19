@@ -7,8 +7,6 @@ import (
 )
 
 func main() {
-
-	//http.ListenAndServe(":8180", nil)
 	// 引用数据库
 	InitDB()
 

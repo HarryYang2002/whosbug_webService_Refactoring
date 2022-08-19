@@ -8,6 +8,7 @@ import (
 	. "webService_Refactoring/modules"
 )
 
+// UncalculateDelete 接收完数据之后删除为计算的object信息
 func UncalculateDelete(context *gin.Context) {
 	//接收数据
 	var t T
@@ -33,7 +34,7 @@ func UncalculateDelete(context *gin.Context) {
 	}
 	//以version去找
 	release := ReleasesTable{}
-	res2 := Db.Table("releases").Where("release_version = ? and project_table_id = ?", version, project.TableId).First(&release)
+	res2 := Db.Table("releases").Where("release_version = ? and project_table_id = ?", version, project.TableID).First(&release)
 	if errors.Is(res2.Error, gorm.ErrRecordNotFound) {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"error":  "Release get fails",
@@ -45,9 +46,9 @@ func UncalculateDelete(context *gin.Context) {
 	uncounted := ObjectsTable{}
 	commit := CommitsTable{}
 	Db.Table("releases").First(&realRelease, "release_version = ?", version)
-	releaseId := realRelease.TableId
+	releaseId := realRelease.TableID
 	Db.Table("commits").First(&commit, "release_table_id = ?", releaseId)
-	uncountedId := commit.TableId
+	uncountedId := commit.TableID
 	res5 := Db.Table("objects").Delete(&uncounted, "commit_table_id = ?", uncountedId)
 	if res5.Error != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{

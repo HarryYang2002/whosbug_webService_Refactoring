@@ -9,13 +9,13 @@ import (
 )
 
 func GetLastRelease(c *gin.Context) {
-	var id ProjectId
+	var id ProjectID
 	if err := c.ShouldBind(&id); err != nil {
 		err.Error()
 	}
 	projectid := ProjectsTable{}
 	Db.Table("projects").Where("project_id = ?", id.Pid).First(&projectid)
-	projectTableId := projectid.TableId
+	projectTableId := projectid.TableID
 	temp := ReleasesTable{}
 	res := Db.Table("releases").Where("project_table_id = ?", projectTableId).First(&temp)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {

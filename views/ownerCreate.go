@@ -36,7 +36,7 @@ func OwnerCreate(context *gin.Context) {
 		})
 		return
 	}
-	releaseTableId := temp1.TableId
+	releaseTableId := temp1.TableID
 	methods := t.Method
 	n := len(methods)
 
@@ -48,7 +48,7 @@ func OwnerCreate(context *gin.Context) {
 		parameters := methods[i].Parameters
 		commitDemo := CommitsTable{}
 		Db.Table("commits").First(&commitDemo, "release_table_id = ?", releaseTableId)
-		commitTableId := commitDemo.TableId
+		commitTableId := commitDemo.TableID
 		var nodes []NodesTable
 		//数据库中查找所有符合条件的数据
 		Db.Table("nodes").Find(&nodes, "commit_table_id in (?)", commitTableId)
@@ -59,7 +59,7 @@ func OwnerCreate(context *gin.Context) {
 		//第一次筛选
 		var methods2 []NodesTable
 		for x := 0; x < len(nodes); x++ {
-			if nodes[x].CurrentObjectId == methodId {
+			if nodes[x].CurrentObjectID == methodId {
 				methods2 = append(methods2, nodes[x])
 			}
 		}
@@ -103,8 +103,8 @@ func OwnerCreate(context *gin.Context) {
 	var objectInfos []ObjectInfo
 	for i := 0; i < len(params); i++ {
 		objectInfo := ObjectInfo{}
-		objectInfo.objectId = params[i].CurrentObjectId
-		objectInfo.oldObjectId = params[i].FatherObjectId
+		objectInfo.objectId = params[i].CurrentObjectID
+		objectInfo.oldObjectId = params[i].FatherObjectID
 		objectInfo.confidence = params[i].NewConfidence
 		objectInfo.parameters = params[i].ObjectParameters
 		objectInfo.newlineCount = params[i].ObjectNewLine

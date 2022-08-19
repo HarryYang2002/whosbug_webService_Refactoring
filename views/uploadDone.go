@@ -10,6 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// CommitsUploadDoneCreate 上传完数据后计算置信度，然后插入数据库
 func CommitsUploadDoneCreate(context *gin.Context) {
 
 	var t T
@@ -52,8 +53,8 @@ func CommitsUploadDoneCreate(context *gin.Context) {
 		temp3.endLine = temp2[i].EndLine
 		temp3.hash = temp2[i].Hash
 		temp3.newlineCount = temp2[i].NewLine
-		temp3.objectId = temp2[i].CurrentObjectId
-		temp3.oldObjectId = temp2[i].FatherObjectId
+		temp3.objectId = temp2[i].CurrentObjectID
+		temp3.oldObjectId = temp2[i].FatherObjectID
 		temp3.oldlineCount = temp2[i].OldLine
 		temp3.parameters = temp2[i].Parameters
 		temp3.startLine = temp2[i].StartLine
@@ -63,28 +64,26 @@ func CommitsUploadDoneCreate(context *gin.Context) {
 		num, tnum := judge_object(temp2[i], nodes)
 		fmt.Println("n:", tnum)
 		if num != 0 { //有object
+			t := nodes[tnum].OldConfidence
+			nodes[tnum].OldConfidence = nodes[tnum].NewConfidence
 			if judge_change(temp3) == 1 { //没改
-				t := nodes[tnum].OldConfidence
-				nodes[tnum].OldConfidence = nodes[tnum].NewConfidence
 				nodes[tnum].NewConfidence = HightenConfidence(t)
 				fmt.Println(Db.Table("nodes").Where("table_id = ?", tnum).Update("old_confidence", nodes[tnum].OldConfidence))
 				fmt.Println(Db.Table("nodes").Where("table_id = ?", tnum).Update("new_confidence", nodes[tnum].NewConfidence))
 				//Db.M(&).Update("name", "hello")
 			} else {
-				t1 := nodes[tnum].OldConfidence
-				nodes[tnum].OldConfidence = nodes[tnum].NewConfidence
-				nodes[tnum].NewConfidence = CalculateConfidence(temp3, t1)
+				nodes[tnum].NewConfidence = CalculateConfidence(temp3, t)
 				fmt.Println(Db.Table("nodes").Where("table_id = ?", tnum).Update("old_confidence", nodes[tnum].OldConfidence))
 				fmt.Println(Db.Table("nodes").Where("table_id = ?", tnum).Update("new_confidence", nodes[tnum].NewConfidence))
 			}
 		} else {
 			temp4 := NodesTable{}
-			temp4.CommitTableId = temp2[i].CommitTableId
-			temp4.CurrentObjectId = temp2[i].CurrentObjectId
-			temp4.FatherObjectId = temp2[i].FatherObjectId
+			temp4.CommitTableID = temp2[i].CommitTableID
+			temp4.CurrentObjectID = temp2[i].CurrentObjectID
+			temp4.FatherObjectID = temp2[i].FatherObjectID
 			temp4.NewConfidence = CalculateConfidence(temp3, 0)
 			temp4.ObjectPath = temp2[i].ObjectPath
-			temp4.ObjectTableId = int(temp2[i].TableId) //?
+			temp4.ObjectTableID = int(temp2[i].TableID)
 			temp4.ObjectParameters = temp2[i].Parameters
 			temp4.OldConfidence = 0
 			temp4.ObjectAdLine = temp2[i].AddedLine
@@ -92,10 +91,7 @@ func CommitsUploadDoneCreate(context *gin.Context) {
 			temp4.ObjectNewLine = temp2[i].NewLine
 			temp4.ObjectOldLine = temp2[i].OldLine
 			fmt.Println(Db.Table("nodes").Create(&temp4).RowsAffected)
-
 		}
-
 	}
 	context.Status(200)
-
 }

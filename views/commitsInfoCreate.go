@@ -11,6 +11,7 @@ import (
 
 // 写入数据异常
 
+// CommitsInfoCreate 在数据库中创建commit
 func CommitsInfoCreate(context *gin.Context) {
 
 	var t T2
@@ -37,11 +38,11 @@ func CommitsInfoCreate(context *gin.Context) {
 		context.Status(400)
 		return
 	}
-	releaseTableId := temp1.TableId
+	releaseTableId := temp1.TableID
 	n := len(t.Commit)
 	for i := 0; i < n; i++ {
 		temp2 := CommitsTable{}
-		temp2.ReleaseTableId = int(releaseTableId)
+		temp2.ReleaseTableID = int(releaseTableId)
 		temp2.Hash = t.Commit[i].Hash
 		temp2.Author = t.Commit[i].Author
 		temp2.Email = t.Commit[i].Email

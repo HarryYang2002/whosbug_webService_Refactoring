@@ -9,6 +9,7 @@ import (
 	. "webService_Refactoring/modules"
 )
 
+// CheckToken 检查token
 func CheckToken() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.Request.Header.Get("Authorization")

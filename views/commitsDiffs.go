@@ -9,6 +9,7 @@ import (
 	. "webService_Refactoring/modules"
 )
 
+// CommitsDiffsCreate 在数据库中创建commitdiff
 func CommitsDiffsCreate(context *gin.Context) {
 
 	var t T4
@@ -36,20 +37,20 @@ func CommitsDiffsCreate(context *gin.Context) {
 		return
 	}
 	commit := CommitsTable{}
-	Db.Table("commits").First(&commit, "release_table_id = ?", temp1.TableId)
+	Db.Table("commits").First(&commit, "release_table_id = ?", temp1.TableID)
 	n := len(t.UncountedObject)
-	releaseId := temp1.TableId
-	commitId := commit.TableId
+	releaseId := temp1.TableID
+	commitId := commit.TableID
 	for i := 0; i < n; i++ {
 		temp2 := ObjectsTable{}
-		temp2.CommitTableId = int(commitId)
-		temp2.ReleaseTableId = int(releaseId)
-		temp2.FatherObjectId = t.UncountedObject[i].OldObjectId
+		temp2.CommitTableID = int(commitId)
+		temp2.ReleaseTableID = int(releaseId)
+		temp2.FatherObjectID = t.UncountedObject[i].OldObjectId
 		temp2.DeletedLine = t.UncountedObject[i].DeletedLineCount
 		temp2.EndLine = t.UncountedObject[i].EndLine
 		temp2.Hash = t.UncountedObject[i].Hash
 		temp2.NewLine = t.UncountedObject[i].NewLineCount
-		temp2.CurrentObjectId = t.UncountedObject[i].ObjectId
+		temp2.CurrentObjectID = t.UncountedObject[i].ObjectId
 		temp2.ObjectPath = t.UncountedObject[i].Path
 		temp2.OldLine = t.UncountedObject[i].OldLineCount
 		temp2.Parameters = t.UncountedObject[i].Parameters

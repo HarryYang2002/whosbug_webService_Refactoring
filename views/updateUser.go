@@ -50,7 +50,7 @@ func UpdateUser(context *gin.Context) {
 		return
 	}
 	context.JSON(http.StatusOK, gin.H{
-		"id":         temp.UserId,
+		"id":         temp.UserID,
 		"username":   temp.UserName,
 		"first_name": temp.UserFirstName,
 		"last_name":  temp.UserLastName,
@@ -94,7 +94,7 @@ func UpdateUserPartial(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusOK, gin.H{
-		"id":         temp.UserId,
+		"id":         temp.UserID,
 		"username":   temp.UserName,
 		"first_name": temp.UserFirstName,
 		"last_name":  temp.UserLastName,

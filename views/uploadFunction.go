@@ -18,7 +18,7 @@ func judge_object(temp2 ObjectsTable, nodes []NodesTable) (int, int) {
 	var paramsnum []int
 	var tnum int
 	for x := 0; x < len(nodes); x++ { //0-9
-		if nodes[x].CurrentObjectId == temp2.CurrentObjectId {
+		if nodes[x].CurrentObjectID == temp2.CurrentObjectID {
 			methods = append(methods, nodes[x])
 			nodesnum = append(nodesnum, x) //3 5 7 9 n=4
 		} //0 1 2 3

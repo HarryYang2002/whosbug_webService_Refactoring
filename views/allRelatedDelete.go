@@ -8,6 +8,7 @@ import (
 	. "webService_Refactoring/modules"
 )
 
+// AllRelatedDelete 对不必要保存的数据进行删除
 func AllRelatedDelete(context *gin.Context) {
 	//接收数据
 	var t T
@@ -33,7 +34,7 @@ func AllRelatedDelete(context *gin.Context) {
 	}
 	//以version去找
 	release := ReleasesTable{}
-	res2 := Db.Table("releases").Where("release_version = ? and project_table_id = ?", version, project.TableId).First(&release)
+	res2 := Db.Table("releases").Where("release_version = ? and project_table_id = ?", version, project.TableID).First(&release)
 	if errors.Is(res2.Error, gorm.ErrRecordNotFound) {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"error":  "Release get fails",
@@ -50,7 +51,7 @@ func AllRelatedDelete(context *gin.Context) {
 	uncounted := ObjectsTable{}
 	commit := CommitsTable{}
 	Db.Table("releases").First(&realRelease, "release_version = ?", version)
-	releaseId := realRelease.TableId
+	releaseId := realRelease.TableID
 	res3 := Db.Table("releases").Delete(&realRelease, "release_version = ?", version)
 	if res3.Error != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{
@@ -59,7 +60,7 @@ func AllRelatedDelete(context *gin.Context) {
 		return
 	}
 	Db.Table("commits").First(&commit, "release_table_id = ?", releaseId)
-	uncountedId := commit.TableId
+	uncountedId := commit.TableID
 	res4 := Db.Table("commits").Delete(&realRelease, "release_table_id = ?", releaseId)
 	if res4.Error != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{

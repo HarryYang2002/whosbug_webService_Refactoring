@@ -79,7 +79,7 @@ func getHistory(objectId string) (result []HistoryInfo) {
 	n := len(temp)
 	for i := 0; i < n; i++ {
 		var temp1 CommitsTable
-		tableId := temp[i].CommitTableId
+		tableId := temp[i].CommitTableID
 		res := Db.Table("commits").Where("table_id = ? ", tableId).First(&temp1)
 		if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 			return
@@ -109,13 +109,13 @@ func getHistory(objectId string) (result []HistoryInfo) {
 func getChain(objectID string) (node TreeNode) {
 	temp := ObjectsTable{}
 	Db.Table("objects").First(&temp, "current_object_id = ?", objectID)
-	node.object = ObjectInfo{temp.CurrentObjectId, temp.FatherObjectId, 0,
+	node.object = ObjectInfo{temp.CurrentObjectID, temp.FatherObjectID, 0,
 		temp.Parameters, temp.OldLine, temp.NewLine,
 		temp.DeletedLine, temp.AddedLine}
 	var tempChilds []ObjectsTable
 	Db.Table("objects").Find(&tempChilds, "father_object_id in (?)", objectID)
 	for i := range tempChilds {
-		node.childs = append(node.childs, getChain(tempChilds[i].CurrentObjectId))
+		node.childs = append(node.childs, getChain(tempChilds[i].CurrentObjectID))
 	}
 	return
 }

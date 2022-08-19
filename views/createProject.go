@@ -27,14 +27,14 @@ func CreateProjectRelease(context *gin.Context) {
 	project := ProjectsTable{}
 	res := Db.Table("projects").Where("project_id = ?", pid).First(&project)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
-		project.ProjectId = pid
+		project.ProjectID = pid
 		fmt.Println(Db.Table("projects").Create(&project).RowsAffected)
 	}
 	release := ReleasesTable{}
 	res2 := Db.Table("releases").Where("release_version = ? "+
 		"and last_commit_hash = ?", releaseVersion, releaseHash).First(&release)
 	if errors.Is(res2.Error, gorm.ErrRecordNotFound) {
-		release.ProjectTableId = int(project.TableId)
+		release.ProjectTableID = int(project.TableID)
 		release.ReleaseVersion = releaseVersion
 		release.LastCommitHash = releaseHash
 		fmt.Println(Db.Table("releases").Create(&release).RowsAffected)

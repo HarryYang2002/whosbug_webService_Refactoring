@@ -2,15 +2,18 @@ package modules
 
 //这里是whosbug路由组所需的结构体
 
+// Project 项目信息
 type Project struct {
 	Pid string `form:"pid" json:"pid" binding:"required"`
 }
 
+// Release 版本信息
 type Release struct {
 	Version    string `form:"version" json:"version" binding:"required"`
 	CommitHash string `form:"last_commit_hash" json:"last_commit_hash" binding:"required"`
 }
 
+// Commit commit信息
 type Commit struct {
 	Hash   string `form:"hash" json:"hash" binding:"required"`
 	Email  string `form:"email" json:"email" binding:"required"`
@@ -18,29 +21,34 @@ type Commit struct {
 	Time   string `form:"time" json:"time" binding:"required"`
 }
 
+// T 项目及版本
 type T struct {
 	Project Project
 	Release Release
 }
 
+// T2 项目及版本、commit信息
 type T2 struct {
 	Project Project  `json:"project"`
 	Release Release  `json:"release"`
 	Commit  []Commit `json:"commits"`
 }
 
+// T3 项目、版本、object
 type T3 struct {
 	Project Project  `json:"project"`
 	Release Release  `json:"release"`
 	Object  []Object `json:"objects"`
 }
 
+// ReleaseModules 版本、最新commit、项目
 type ReleaseModules struct {
 	Version        string
 	LastCommitHash string
 	Project        int //or string?
 }
 
+// UncountedObject 未计算的项目信息
 type UncountedObject struct {
 	Hash             string `form:"hash" json:"hash" binding:"required"`
 	ObjectId         string `form:"object_id" json:"object_id" binding:"required"`
@@ -55,6 +63,7 @@ type UncountedObject struct {
 	AddedLineCount   int    `form:"added_line_count" json:"added_new_line_count" binding:"required"`
 }
 
+// Object object信息
 type Object struct {
 	Path          string
 	ObjectId      string
@@ -65,24 +74,28 @@ type Object struct {
 	parameters    string
 }
 
+// T4 项目、版本、未计算的object
 type T4 struct {
 	Project         Project           `json:"project"`
 	Release         Release           `json:"release"`
 	UncountedObject []UncountedObject `json:"objects"`
 }
 
+// Method 方法
 type Method struct {
 	MethodId   string `json:"method_id"`
 	Filepath   string `json:"filepath"`
 	Parameters string `json:"parameters"`
 }
 
+// GetConfidence 为得到置信度而创建的结构体
 type GetConfidence struct {
 	Project Project  `json:"project"`
 	Release Release  `json:"release"`
 	Method  []Method `json:"methods"`
 }
 
+// JsonRes jsonRes
 type JsonRes struct {
 	Status  string
 	Message string

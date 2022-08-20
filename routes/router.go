@@ -24,9 +24,9 @@ func InitRouter() {
 
 	commits := r.Group("/v1/commits")
 	{
-		commits.POST("/commits-info", CheckToken(), CommitsInfoCreate) //1
-		//commits.POST("/delete_uncalculate", CheckToken(), UncalculateDelete) //1
-		commits.POST("/diffs", CheckToken(), CommitsDiffsCreate) //1
+		commits.POST("/commits-info", CheckToken(), CommitsInfoCreate)       //1
+		commits.POST("/delete_uncalculate", CheckToken(), UncalculateDelete) //1
+		commits.POST("/diffs", CheckToken(), CommitsDiffsCreate)             //1
 		//review 暂时不重构
 		commits.POST("/reviewers", CheckToken(), CommitsReviewersCreate)
 		commits.POST("/rules/", CheckToken(), CommitsRulesCreate)

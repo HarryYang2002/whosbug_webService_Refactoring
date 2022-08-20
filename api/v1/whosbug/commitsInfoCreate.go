@@ -1,17 +1,20 @@
-package views
+package whosbug
 
 import (
 	"errors"
-	"github.com/cheggaaa/pb"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
 	. "webService_Refactoring/modules"
 )
 
-func CommitsTrainMethodCreate(context *gin.Context) {
+// 写入数据异常
 
-	var t T
+// CommitsInfoCreate 在数据库中创建commit
+func CommitsInfoCreate(context *gin.Context) {
+
+	var t T2
 
 	err := context.ShouldBind(&t)
 
@@ -35,27 +38,17 @@ func CommitsTrainMethodCreate(context *gin.Context) {
 		context.Status(400)
 		return
 	}
-	temp3 := ObjectsTable{}
-	lastCommitHash := t.Release.CommitHash
-	errs := Db.Table("objects").First(&temp3, "release_version = ? and hash = ?", version, lastCommitHash)
-	if errs != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Delete error",
-		})
-		return
+	releaseTableId := temp1.TableID
+	n := len(t.Commit)
+	for i := 0; i < n; i++ {
+		temp2 := CommitsTable{}
+		temp2.ReleaseTableID = int(releaseTableId)
+		temp2.Hash = t.Commit[i].Hash
+		temp2.Author = t.Commit[i].Author
+		temp2.Email = t.Commit[i].Email
+		temp2.Time = t.Commit[i].Email
+		fmt.Println(Db.Table("commits").Create(&temp2).RowsAffected)
 	}
 	context.Status(200)
-	count := 100
-
-	// 创建进度条并开始
-	bar := pb.StartNew(count)
-
-	for i := 0; i < count; i++ {
-		bar.Increment()
-		//time.Sleep(50 * time.Microsecond)
-	}
-
-	// 结束进度条
-	bar.Finish()
 
 }

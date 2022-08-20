@@ -1,4 +1,4 @@
-package views
+package users
 
 import (
 	"fmt"
@@ -7,6 +7,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 	"net/http"
+	token2 "webService_Refactoring/api/v1/token"
 	. "webService_Refactoring/modules"
 )
 
@@ -26,10 +27,10 @@ func UserCreate(context *gin.Context) {
 	}
 	var tokenKey string
 	tokenKey = registerForm.Username + "&" + registerForm.Password
-	token := MD5(tokenKey)
+	token := token2.MD5(tokenKey)
 
 	var userUUID uuid.UUID
-	userUUID = CreateUUID()
+	userUUID = token2.CreateUUID()
 
 	context.JSON(http.StatusOK, gin.H{
 		"id":         userUUID.String(),
@@ -45,7 +46,7 @@ func UserCreate(context *gin.Context) {
 		UserID:        userUUID,
 		UserName:      registerForm.Username,
 		UserToken:     token,
-		UserPassword:  MD5(registerForm.Password),
+		UserPassword:  token2.MD5(registerForm.Password),
 		UserFirstName: registerForm.Firstname,
 		UserLastName:  registerForm.Lastname,
 		UserEmail:     registerForm.Email,

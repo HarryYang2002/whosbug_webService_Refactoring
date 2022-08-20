@@ -1,4 +1,4 @@
-package views
+package token
 
 import (
 	"crypto/md5"
@@ -34,15 +34,6 @@ func CreateToken(context *gin.Context) {
 	context.JSON(http.StatusOK, gin.H{
 		"token": MD5(token),
 	})
-
-	//dbCreateUser := UsersTable{
-	//	UserId:       CreateUUID(),
-	//	UserName:     loginForm.Username,
-	//	UserToken:    MD5(token),
-	//	UserPassword: loginForm.Password,
-	//}
-	//fmt.Println(Db.Table("users").Create(&dbCreateUser).RowsAffected)
-
 }
 
 // CreateUUID 根据时间戳生成uuid

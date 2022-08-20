@@ -1,4 +1,4 @@
-package views
+package whosbug
 
 import "github.com/gin-gonic/gin"
 

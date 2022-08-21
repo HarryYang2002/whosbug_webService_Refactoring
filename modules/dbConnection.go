@@ -24,8 +24,9 @@ func InitDB() {
 		DbTimeZone,
 	)
 	Db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info), // 设置日志级别为Info, 即打印所有SQL语句
-		// Logger:logger.Default.LogMode(logger.Warn), // 只打印慢查询, 默认的SlowThreshold为200ms
+		PrepareStmt: true, // 设置缓存预编译
+		// Logger: logger.Default.LogMode(logger.Info), // 设置日志级别为Info, 即打印所有SQL语句
+		Logger: logger.Default.LogMode(logger.Warn), // 只打印慢查询, 默认的SlowThreshold为200ms
 	})
 	if err != nil {
 		// 关闭数据库连接，打印错误信息

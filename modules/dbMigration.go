@@ -129,7 +129,7 @@ const (
 	indexComReleaseTableId = "create index crtid on commits(release_table_id);"
 	indexObjReleaseTableId = "create index ortid on objects(release_table_id);"
 	indexObjCommitTableId  = "create index octid on objects(commit_table_id);"
-	indexNodMerge          = "create index n_idx on nodes(object_parameters, object_path, current_object_id);"
+	indexNodMerge          = "create index n_idx on nodes(current_object_id, object_parameters, object_path);"
 	// indexObjectPath        = "create index path_idx on nodes(object_path);" // 不一定会让速度更快吧，索引太多了
 	indexNodCommitTableId = "create index nctid on nodes(commit_table_id);"
 	indexNodObjectTableId = "create index notid on nodes(object_table_id);"

@@ -29,7 +29,7 @@ func OwnerCreate(context *gin.Context) {
 		return
 	}
 	temp1 := ReleasesTable{}
-	res1 := Db.Table("releases").First(&temp1, "release_version = ?", version)
+	res1 := Db.Table("releases").Select("table_id").First(&temp1, "release_version = ?", version)
 	if errors.Is(res1.Error, gorm.ErrRecordNotFound) {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"error": "Release version " + t.Release.Version + " not exists",
@@ -47,7 +47,7 @@ func OwnerCreate(context *gin.Context) {
 		filePath := methods[i].Filepath
 		parameters := methods[i].Parameters
 		commitDemo := CommitsTable{}
-		Db.Table("commits").First(&commitDemo, "release_table_id = ?", releaseTableId)
+		Db.Table("commits").Select("table_id").First(&commitDemo, "release_table_id = ?", releaseTableId)
 		commitTableId := commitDemo.TableID
 		var nodes []NodesTable
 		//数据库中查找所有符合条件的数据

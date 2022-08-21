@@ -44,9 +44,11 @@ func UncalculateDelete(context *gin.Context) {
 	realRelease := ReleasesTable{}
 	uncounted := ObjectsTable{}
 	commit := CommitsTable{}
-	Db.Table("releases").First(&realRelease, "release_version = ?", version)
+	// 加入select子句
+	Db.Table("releases").Select("table_id").First(&realRelease, "release_version = ?", version)
 	releaseId := realRelease.TableId
-	Db.Table("commits").First(&commit, "release_table_id = ?", releaseId)
+	// 加入select子句
+	Db.Table("commits").Select("table_id").First(&commit, "release_table_id = ?", releaseId)
 	uncountedId := commit.TableId
 	res5 := Db.Table("objects").Delete(&uncounted, "commit_table_id = ?", uncountedId)
 	if res5.Error != nil {

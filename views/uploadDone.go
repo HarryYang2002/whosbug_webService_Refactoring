@@ -42,6 +42,7 @@ func CommitsUploadDoneCreate(context *gin.Context) {
 	var temp2 []ObjectsTable
 	Db.Table("objects").Find(&temp2)
 	n := len(temp2)
+	NodesSlice := make([]NodesTable, n)
 
 	for i := 0; i < n; i++ {
 		var nodes []NodesTable
@@ -91,11 +92,11 @@ func CommitsUploadDoneCreate(context *gin.Context) {
 			temp4.ObjectDeLine = temp2[i].DeletedLine
 			temp4.ObjectNewLine = temp2[i].NewLine
 			temp4.ObjectOldLine = temp2[i].OldLine
-			fmt.Println(Db.Table("nodes").Create(&temp4).RowsAffected)
-
+			// fmt.Println(Db.Table("nodes").Create(&temp4).RowsAffected)
+			NodesSlice = append(NodesSlice, temp4) // 批量插入
 		}
-
 	}
+	Db.Table("nodes").Create(&NodesSlice) // 批量插入
 	context.Status(200)
 
 }

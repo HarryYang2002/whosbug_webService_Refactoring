@@ -13,8 +13,9 @@ func GetLastRelease(c *gin.Context) {
 	if err := c.ShouldBind(&id); err != nil {
 		err.Error()
 	}
-	projectid := ProjectsTable{}
-	Db.Table("projects").Where("project_id = ?", id.Pid).First(&projectid)
+	projectid := ProjectsTable{} // 需要获取的是pid
+	// 加入select子句
+	Db.Table("projects").Select("table_id").Where("project_id = ?", id.Pid).First(&projectid)
 	projectTableId := projectid.TableId
 	temp := ReleasesTable{}
 	res := Db.Table("releases").Where("project_table_id = ?", projectTableId).First(&temp)

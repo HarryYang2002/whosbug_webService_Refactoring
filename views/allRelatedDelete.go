@@ -45,7 +45,7 @@ func AllRelatedDelete(context *gin.Context) {
 	//首先去releases表中去找对应的version，取出该条数据的table_id,此时可删除该条数据
 	//再去commits表中去找table_id对应的release_table_id的那条数据,此时可删除该条数据
 	//再以该条数据的table_id去uncounted_objects表中相应的commit_table_id
-	//再把该条数据删除（级联删除不会，只能用笨方法，我是菜逼）
+	//再把该条数据删除（没有级联删除）
 	realRelease := ReleasesTable{}
 	uncounted := ObjectsTable{}
 	commit := CommitsTable{}

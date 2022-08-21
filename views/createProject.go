@@ -25,7 +25,8 @@ func CreateProjectRelease(context *gin.Context) {
 	// 数据库查询pid，若存在且数据库中last_commit_hash 为传递的last_commit_hash
 	// 不新建project并返回404
 	project := ProjectsTable{}
-	res := Db.Table("projects").Where("project_id = ?", pid).First(&project)
+	// 加入select子句
+	res := Db.Table("projects").Select("table_id").Where("project_id = ?", pid).First(&project)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		project.ProjectId = pid
 		fmt.Println(Db.Table("projects").Create(&project).RowsAffected)

@@ -12,7 +12,7 @@ import (
 func InitRouter() {
 	gin.SetMode(AppMode)
 	r := gin.Default()
-	r.POST("/v1/api-token-auth", CreateToken)
+	r.POST("/v1/token", CreateToken)
 
 	api := r.Group("/v1/users")
 	{
@@ -24,20 +24,19 @@ func InitRouter() {
 
 	commits := r.Group("/v1/commits")
 	{
-		commits.POST("/commits-info", CheckToken(), CommitsInfoCreate)       //1
-		commits.POST("/delete_uncalculate", CheckToken(), UncalculateDelete) //1
-		commits.POST("/diffs", CheckToken(), CommitsDiffsCreate)             //1
-		//review 暂时不重构
-		commits.POST("/reviewers", CheckToken(), CommitsReviewersCreate)
-		commits.POST("/rules/", CheckToken(), CommitsRulesCreate)
-		//
+		commits.POST("/commits_info", CheckToken(), CommitsInfoCreate)        //1
+		commits.POST("/uncalculate_delete", CheckToken(), UncalculateDelete)  //1
+		commits.POST("/diffs", CheckToken(), CommitsDiffsCreate)              //1
 		commits.POST("/train_method", CommitsTrainMethodCreate, CheckToken()) //1
-		commits.POST("/upload-done", CheckToken(), CommitsUploadDoneCreate)   //1
+		commits.POST("/nodes_create", CheckToken(), CommitsUploadDoneCreate)  //1
+		//reviews、rules 暂时不重构
+		commits.POST("/reviewers", CheckToken(), CommitsReviewersCreate)
+		commits.POST("/rules", CheckToken(), CommitsRulesCreate)
 	}
-	r.POST("/v1/create-project-release", CheckToken(), CreateProjectRelease) //1
-	r.POST("/v1/delete_all_related", CheckToken(), AllRelatedDelete)         //1
+	r.POST("/v1/project_release_create", CheckToken(), CreateProjectRelease) //1
+	r.POST("/v1/all_related_delete", CheckToken(), AllRelatedDelete)         //1
 	r.GET("/v1/liveness", CheckToken(), LivenessList)                        //1
 	r.POST("/v1/owner", CheckToken(), OwnerCreate)                           //1
-	r.POST("/v1/releases/last", CheckToken(), GetLastRelease)                //1
+	r.POST("/v1/last_releases", CheckToken(), GetLastRelease)                //1
 	r.Run(HttpPort)
 }

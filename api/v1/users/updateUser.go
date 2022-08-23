@@ -9,10 +9,10 @@ import (
 	. "webService_Refactoring/modules"
 )
 
-//TODO 优化1：连接数据库代码冗余... 已解决
-//     优化2：命名...
-
-// UpdateUser 更新用户信息，put为上传，patch为修改
+// UpdateUser
+// @param context *gin.Context
+// @Description 更新用户信息，put为上传
+// @author: HarryYang 2022-08-23 15:41:58
 func UpdateUser(context *gin.Context) {
 	var userId UserID
 	err := context.ShouldBindUri(&userId)
@@ -57,6 +57,10 @@ func UpdateUser(context *gin.Context) {
 	})
 }
 
+// UpdateUserPartial
+// @param context *gin.Context
+// @Description 更新用户信息，patch为修改
+// @author: HarryYang 2022-08-23 15:42:11
 func UpdateUserPartial(context *gin.Context) {
 	var userId UserID
 	err := context.ShouldBindUri(&userId)

@@ -10,7 +10,11 @@ import (
 	. "webService_Refactoring/modules"
 )
 
-// MD5 md5算法，生成的依据是时间戳
+// MD5
+// @param v string
+// @Description md5算法，生成的依据是时间戳
+// @return string
+// @author: HarryYang 2022-08-23 15:44:44
 func MD5(v string) string {
 	d := []byte(v)
 	m := md5.New()
@@ -18,8 +22,10 @@ func MD5(v string) string {
 	return hex.EncodeToString(m.Sum(nil))
 }
 
-// CreateToken 路由函数，访问端口时调用，根据用户输入的username和password，经过MD5算法后生成token
-// 并将username、password、token、和根据时间戳生成的uuid存入数据库中
+// CreateToken
+// @param context *gin.Context
+// @Description 据用户输入的username和password，经过MD5算法后生成token
+// @author: HarryYang 2022-08-23 15:44:15
 func CreateToken(context *gin.Context) {
 	var loginForm LoginForm
 	err := context.ShouldBind(&loginForm)
@@ -36,7 +42,10 @@ func CreateToken(context *gin.Context) {
 	})
 }
 
-// CreateUUID 根据时间戳生成uuid
+// CreateUUID
+// @Description 根据时间戳生成uuid
+// @return uuid.UUID
+// @author: HarryYang 2022-08-23 15:44:56
 func CreateUUID() uuid.UUID {
 	u1, err := uuid.NewUUID()
 	if err != nil {

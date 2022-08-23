@@ -9,7 +9,10 @@ import (
 	. "webService_Refactoring/modules"
 )
 
-// CommitsDiffsCreate 在数据库中创建commitdiff
+// CommitsDiffsCreate
+// @param context *gin.Context
+// @Description 上传object信息
+// @author: TongLei 2022-08-23 14:41:09
 func CommitsDiffsCreate(context *gin.Context) {
 
 	var t T4
@@ -22,9 +25,11 @@ func CommitsDiffsCreate(context *gin.Context) {
 		})
 		return
 	}
+	//获取pid，version
 	pid := t.Project.Pid
 	version := t.Release.Version
 	temp := ProjectsTable{}
+	//从数据库中获取数据
 	res := Db.Table("projects").First(&temp, "project_id = ? ", pid)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		context.Status(400)
@@ -36,6 +41,7 @@ func CommitsDiffsCreate(context *gin.Context) {
 		context.Status(400)
 		return
 	}
+	//上传objects数据
 	commit := CommitsTable{}
 	Db.Table("commits").First(&commit, "release_table_id = ?", temp1.TableID)
 	n := len(t.UncountedObject)

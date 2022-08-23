@@ -11,7 +11,10 @@ import (
 	. "webService_Refactoring/modules"
 )
 
-// UserCreate 生成用户数据并存储到数据库中
+// UserCreate
+// @param context *gin.Context
+// @Description 生成用户数据并存储到数据库中，密码用MD5加密
+// @author: HarryYang 2022-08-23 15:41:20
 func UserCreate(context *gin.Context) {
 	//注册命名规则
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {

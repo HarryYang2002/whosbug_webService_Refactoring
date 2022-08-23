@@ -1,6 +1,6 @@
 package modules
 
-// 这里时需要与数据库交互的结构体
+// 这里是需要与数据库交互的结构体
 
 import (
 	"github.com/google/uuid"
@@ -17,7 +17,7 @@ type UsersTable struct {
 	UserPassword  string    `gorm:"type:varchar(128)"`
 }
 
-// CommitsTable commit表单
+// CommitsTable commits表单
 type CommitsTable struct {
 	TableID        uint64 `gorm:"primaryKey;auto_increment;type:bigserial;column:table_id"`
 	Hash           string `gorm:"type:varchar(1000)"`

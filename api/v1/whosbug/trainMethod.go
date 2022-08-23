@@ -9,6 +9,10 @@ import (
 	. "webService_Refactoring/modules"
 )
 
+// CommitsTrainMethodCreate
+// @param context *gin.Context
+// @Description 该函数将废弃，忽略即可
+// @author: TongLei 2022-08-23 14:45:55
 func CommitsTrainMethodCreate(context *gin.Context) {
 
 	var t T

@@ -9,9 +9,10 @@ import (
 	. "webService_Refactoring/modules"
 )
 
-// 写入数据异常
-
-// CommitsInfoCreate 在数据库中创建commit
+// CommitsInfoCreate
+// @param context *gin.Context
+// @Description 上传commit信息
+// @author: TongLei 2022-08-23 14:28:11
 func CommitsInfoCreate(context *gin.Context) {
 
 	var t T2
@@ -24,8 +25,10 @@ func CommitsInfoCreate(context *gin.Context) {
 		})
 		return
 	}
+	//获取pid，version
 	pid := t.Project.Pid
 	version := t.Release.Version
+	//获取数据
 	temp := ProjectsTable{}
 	res := Db.Table("projects").First(&temp, "project_id = ? ", pid)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
@@ -38,6 +41,7 @@ func CommitsInfoCreate(context *gin.Context) {
 		context.Status(400)
 		return
 	}
+	//上传commits数据
 	releaseTableId := temp1.TableID
 	n := len(t.Commit)
 	for i := 0; i < n; i++ {
@@ -46,9 +50,8 @@ func CommitsInfoCreate(context *gin.Context) {
 		temp2.Hash = t.Commit[i].Hash
 		temp2.Author = t.Commit[i].Author
 		temp2.Email = t.Commit[i].Email
-		temp2.Time = t.Commit[i].Email
+		temp2.Time = t.Commit[i].Time
 		fmt.Println(Db.Table("commits").Create(&temp2).RowsAffected)
 	}
 	context.Status(200)
-
 }

@@ -8,7 +8,10 @@ import (
 	. "webService_Refactoring/modules"
 )
 
-// UncalculateDelete 接收完数据之后删除为计算的object信息
+// UncalculateDelete
+// @param context *gin.Context
+// @Description 删除objects表中的信息
+// @author: HarryYang 2022-08-23 14:46:56
 func UncalculateDelete(context *gin.Context) {
 	//接收数据
 	var t T

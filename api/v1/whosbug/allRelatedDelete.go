@@ -8,9 +8,11 @@ import (
 	. "webService_Refactoring/modules"
 )
 
-// AllRelatedDelete 对不必要保存的数据进行删除
+// AllRelatedDelete
+// @param context *gin.Context
+// @Description 删除commits、objects、releases表中的数据
+// @author: HarryYang 2022-08-23 14:25:17
 func AllRelatedDelete(context *gin.Context) {
-	//接收数据
 	var t T
 	err := context.ShouldBind(&t)
 	if err != nil {
@@ -45,8 +47,8 @@ func AllRelatedDelete(context *gin.Context) {
 	//删除的内容在此做一下说明
 	//首先去releases表中去找对应的version，取出该条数据的table_id,此时可删除该条数据
 	//再去commits表中去找table_id对应的release_table_id的那条数据,此时可删除该条数据
-	//再以该条数据的table_id去uncounted_objects表中相应的commit_table_id
-	//再把该条数据删除（级联删除不会，只能用笨方法，我是菜逼）
+	//再以该条数据的table_id去objects表中相应的commit_table_id，删除
+	//后续数据库设置了级联删除，可以优化
 	realRelease := ReleasesTable{}
 	uncounted := ObjectsTable{}
 	commit := CommitsTable{}

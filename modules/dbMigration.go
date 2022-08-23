@@ -135,6 +135,9 @@ const (
 	indexNodObjectTableId = "create index notid on nodes(object_table_id);"
 )
 
+// Create
+// @Description 建表，如有则不创建
+// @author: WuTianPeng 2022-08-23 15:46:46
 func Create() {
 	Db.Exec(schemaUsers) // 执行原生SQL语句
 	Db.Exec(schemaProjects)

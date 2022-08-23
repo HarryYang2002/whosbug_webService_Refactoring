@@ -9,34 +9,38 @@ import (
 	. "webService_Refactoring/utils"
 )
 
+// InitRouter
+// @Description 总路由
+// @author: HarryYang 2022-08-23 14:29:33
 func InitRouter() {
 	gin.SetMode(AppMode)
 	r := gin.Default()
-	r.POST("/v1/token", CreateToken)
-
-	api := r.Group("/v1/users")
+	v1 := r.Group("/v1")
 	{
-		api.POST("/", UserCreate)
-		api.GET("/:id", CheckToken(), UserRead)
-		api.PUT("/:id", CheckToken(), UpdateUser)
-		api.PATCH("/:id", CheckToken(), UpdateUserPartial)
+		v1.POST("/token", CreateToken)
+		api := v1.Group("/users")
+		{
+			api.POST("/", UserCreate)
+			api.GET("/:id", CheckToken(), UserRead)
+			api.PUT("/:id", CheckToken(), UpdateUser)
+			api.PATCH("/:id", CheckToken(), UpdateUserPartial)
+		}
+		commits := v1.Group("/commits")
+		{
+			commits.POST("/commits_info", CheckToken(), CommitsInfoCreate)
+			commits.POST("/uncalculate_delete", CheckToken(), UncalculateDelete)
+			commits.POST("/diffs", CheckToken(), CommitsDiffsCreate)
+			commits.POST("/train_method", CheckToken(), CommitsTrainMethodCreate)
+			commits.POST("/nodes_create", CheckToken(), CommitsUploadDoneCreate)
+			//reviews、rules 暂时不重构
+			commits.POST("/reviewers", CheckToken(), CommitsReviewersCreate)
+			commits.POST("/rules", CheckToken(), CommitsRulesCreate)
+		}
+		v1.POST("/project_release_create", CheckToken(), CreateProjectRelease)
+		v1.POST("/all_related_delete", CheckToken(), AllRelatedDelete)
+		v1.GET("/liveness", CheckToken(), LivenessList)
+		v1.POST("/owner", CheckToken(), OwnerCreate)
+		v1.POST("/last_releases", CheckToken(), GetLastRelease)
 	}
-
-	commits := r.Group("/v1/commits")
-	{
-		commits.POST("/commits_info", CheckToken(), CommitsInfoCreate)        //1
-		commits.POST("/uncalculate_delete", CheckToken(), UncalculateDelete)  //1
-		commits.POST("/diffs", CheckToken(), CommitsDiffsCreate)              //1
-		commits.POST("/train_method", CommitsTrainMethodCreate, CheckToken()) //1
-		commits.POST("/nodes_create", CheckToken(), CommitsUploadDoneCreate)  //1
-		//reviews、rules 暂时不重构
-		commits.POST("/reviewers", CheckToken(), CommitsReviewersCreate)
-		commits.POST("/rules", CheckToken(), CommitsRulesCreate)
-	}
-	r.POST("/v1/project_release_create", CheckToken(), CreateProjectRelease) //1
-	r.POST("/v1/all_related_delete", CheckToken(), AllRelatedDelete)         //1
-	r.GET("/v1/liveness", CheckToken(), LivenessList)                        //1
-	r.POST("/v1/owner", CheckToken(), OwnerCreate)                           //1
-	r.POST("/v1/last_releases", CheckToken(), GetLastRelease)                //1
 	r.Run(HttpPort)
 }

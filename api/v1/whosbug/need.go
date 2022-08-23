@@ -1,5 +1,7 @@
 package whosbug
 
+// keyman算法所需的数据结构和函数
+
 import (
 	"errors"
 	"gorm.io/gorm"
@@ -67,9 +69,11 @@ type TreeNode struct {
 	childs []TreeNode
 }
 
-//  @param objectId
-//  @return []historyInfo
-//  返回的切片要按时间顺序排，最新的commit及其对应object放在索引0
+// getHistory
+// @param objectId string
+// @Description 返回切片，且最新的commit及其对应的object放在索引0
+// @return result []HistoryInfo
+// @author: TongLei 2022-08-23 15:37:25
 func getHistory(objectId string) (result []HistoryInfo) {
 	var temp []NodesTable
 	res2 := Db.Table("nodes").Where("current_object_id = ? ", objectId).Find(&temp)
@@ -104,8 +108,11 @@ func getHistory(objectId string) (result []HistoryInfo) {
 
 }
 
-//  @param objectId 函数的id
-//  @return	chainNode 该函数所在的定义链的根结点
+// getChain
+// @param objectID string 函数的id
+// @Description 该函数所在的定义链的根结点
+// @return node chainNode
+// @author: Halokk 2022-08-23 15:39:11
 func getChain(objectID string) (node TreeNode) {
 	temp := ObjectsTable{}
 	Db.Table("objects").First(&temp, "current_object_id = ?", objectID)

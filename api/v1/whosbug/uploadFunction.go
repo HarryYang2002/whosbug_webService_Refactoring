@@ -5,6 +5,13 @@ import (
 	. "webService_Refactoring/modules"
 )
 
+// judge_object
+// @param temp2 ObjectsTable
+// @param nodes []NodesTable
+// @Description uploadDown里面计算时所调用的函数
+// @return int
+// @return int
+// @author: TongLei 2022-08-23 14:47:40
 func judge_object(temp2 ObjectsTable, nodes []NodesTable) (int, int) {
 
 	// temp2 := ObjectsTable{}

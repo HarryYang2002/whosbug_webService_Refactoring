@@ -8,6 +8,10 @@ import (
 	. "webService_Refactoring/modules"
 )
 
+// GetLastRelease
+// @param c *gin.Context
+// @Description 获取最新的版本信息
+// @author: WuTianPeng 2022-08-23 14:42:38
 func GetLastRelease(c *gin.Context) {
 	var id ProjectID
 	if err := c.ShouldBind(&id); err != nil {
@@ -28,5 +32,4 @@ func GetLastRelease(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{
 		"lastReleaseVersion": temp.ReleaseVersion,
 	})
-
 }

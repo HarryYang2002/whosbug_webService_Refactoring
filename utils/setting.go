@@ -1,7 +1,5 @@
 package utils
 
-// 对ini配置文件进行读取和处理
-
 import (
 	"gopkg.in/ini.v1"
 	"log"
@@ -21,6 +19,9 @@ var (
 	DbTimeZone string
 )
 
+// init
+// @Description 对ini配置文件进行读取和处理
+// @author: WuTianPeng 2022-08-23 15:48:55
 func init() {
 	file, err := ini.Load("configs/config.ini")
 	if err != nil {

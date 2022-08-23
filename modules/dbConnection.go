@@ -13,6 +13,9 @@ import (
 var Db *gorm.DB
 var err error
 
+// InitDB
+// @Description 连接数据库并做设置
+// @author: WuTianPeng 2022-08-23 15:46:03
 func InitDB() {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=%s",
 		DbHost,

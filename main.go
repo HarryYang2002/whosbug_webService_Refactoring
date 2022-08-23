@@ -6,9 +6,11 @@ import (
 	. "webService_Refactoring/routes"
 )
 
+// main
+// @Description 入口函数
+// @author: WuTianPeng 2022-08-23 15:50:25
 func main() {
 
-	//http.ListenAndServe(":8180", nil)
 	// 引用数据库
 	InitDB()
 

@@ -9,7 +9,10 @@ import (
 	. "webService_Refactoring/modules"
 )
 
-// UserRead 从数据库中获取用户的信息
+// UserRead
+// @param context *gin.Context
+// @Description 从数据库中获取用户的信息
+// @author: HarryYang 2022-08-23 15:41:35
 func UserRead(context *gin.Context) {
 	var user UserID
 	err := context.ShouldBindUri(&user)

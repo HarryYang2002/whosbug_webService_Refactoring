@@ -9,7 +9,10 @@ import (
 	. "webService_Refactoring/modules"
 )
 
-// CreateProjectRelease 生成project&release
+// CreateProjectRelease
+// @param context *gin.Context
+// @Description 在projects表中和releases表中生成数据
+// @author: HarryYang 2022-08-23 14:42:13
 func CreateProjectRelease(context *gin.Context) {
 	var t T
 	err1 := context.ShouldBind(&t)

@@ -1,7 +1,5 @@
 package utils
 
-// 业务错误码
-
 const (
 	SUCCESS = 0
 	ERROR   = 9999
@@ -27,6 +25,11 @@ var codeMap = map[int]string{
 	ERROR_USERNAME_FORMAT_WRONG: "用户名格式错误",
 }
 
+// GetErrMsg
+// @param code int
+// @Description 业务错误码（雏形，未实现）
+// @return string
+// @author: WuTianPeng 2022-08-23 15:49:22
 func GetErrMsg(code int) string {
 	return codeMap[code]
 }

@@ -10,7 +10,10 @@ import (
 	"gorm.io/gorm"
 )
 
-// CommitsUploadDoneCreate 上传完数据后计算置信度，然后插入数据库
+// CommitsUploadDoneCreate
+// @param context *gin.Context
+// @Description 将object表的信息计算过后存到nodes表里面
+// @author: TongLei 2022-08-23 14:47:22
 func CommitsUploadDoneCreate(context *gin.Context) {
 
 	var t T

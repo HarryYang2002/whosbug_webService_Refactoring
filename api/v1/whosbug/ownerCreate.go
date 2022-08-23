@@ -9,6 +9,10 @@ import (
 	. "webService_Refactoring/modules"
 )
 
+// OwnerCreate
+// @param context *gin.Context
+// @Description 根据第三方传递的报错信息找出责任人
+// @author: HarryYang 2022-08-23 14:45:16
 func OwnerCreate(context *gin.Context) {
 	var t GetConfidence
 	err := context.ShouldBind(&t)

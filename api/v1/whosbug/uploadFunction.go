@@ -1,7 +1,6 @@
 package whosbug
 
 import (
-	"fmt"
 	. "webService_Refactoring/modules"
 )
 
@@ -31,7 +30,6 @@ func judge_object(temp2 ObjectsTable, nodes []NodesTable) (int, int) {
 		} //0 1 2 3
 	}
 	if len(methods) == 0 {
-		fmt.Println("Get1 objects error:")
 		return 0, 0
 	}
 	//第二次筛选
@@ -43,9 +41,7 @@ func judge_object(temp2 ObjectsTable, nodes []NodesTable) (int, int) {
 		} //0 1
 	}
 	if len(path) == 0 {
-		fmt.Println("Get2 objects error:")
 		return 0, 0
-
 	}
 	//第三次筛选
 	var params []NodesTable
@@ -57,7 +53,6 @@ func judge_object(temp2 ObjectsTable, nodes []NodesTable) (int, int) {
 		}
 	}
 	if len(params) == 0 {
-		fmt.Println("Get3 objects error:")
 		return 0, 0
 	} else {
 		tnum = nodesnum[pathsnum[i]]

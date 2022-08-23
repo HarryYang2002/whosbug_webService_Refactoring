@@ -1,7 +1,6 @@
 package users
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
@@ -54,5 +53,5 @@ func UserCreate(context *gin.Context) {
 		UserLastName:  registerForm.Lastname,
 		UserEmail:     registerForm.Email,
 	}
-	fmt.Println(Db.Table("users").Create(&DbCreateUser).RowsAffected)
+	Db.Table("users").Create(&DbCreateUser)
 }

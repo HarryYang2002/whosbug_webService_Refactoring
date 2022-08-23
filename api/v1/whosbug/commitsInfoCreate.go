@@ -25,10 +25,8 @@ func CommitsInfoCreate(context *gin.Context) {
 		})
 		return
 	}
-	//获取pid，version
 	pid := t.Project.Pid
 	version := t.Release.Version
-	//获取数据
 	temp := ProjectsTable{}
 	res := Db.Table("projects").First(&temp, "project_id = ? ", pid)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
@@ -36,7 +34,7 @@ func CommitsInfoCreate(context *gin.Context) {
 		return
 	}
 	temp1 := ReleasesTable{}
-	res1 := Db.Table("releases").First(&temp1, "release_version = ?", version)
+	res1 := Db.Table("releases").Select("table_id").First(&temp1, "release_version = ?", version)
 	if errors.Is(res1.Error, gorm.ErrRecordNotFound) {
 		context.Status(400)
 		return
@@ -44,6 +42,7 @@ func CommitsInfoCreate(context *gin.Context) {
 	//上传commits数据
 	releaseTableId := temp1.TableID
 	n := len(t.Commit)
+	commitsSlice := make([]CommitsTable, n) // 批量插入
 	for i := 0; i < n; i++ {
 		temp2 := CommitsTable{}
 		temp2.ReleaseTableID = int(releaseTableId)
@@ -52,6 +51,10 @@ func CommitsInfoCreate(context *gin.Context) {
 		temp2.Email = t.Commit[i].Email
 		temp2.Time = t.Commit[i].Time
 		fmt.Println(Db.Table("commits").Create(&temp2).RowsAffected)
+		temp2.Time = t.Commit[i].Time
+		commitsSlice[i] = temp2
 	}
+	Db.Table("commits").Create(&commitsSlice)
 	context.Status(200)
+
 }

@@ -1,3 +1,4 @@
 # whosbug_webService_Refactoring
-测试2
-测试diffs命令
+该项目为whosbug-webservice由python的Django版本重构为GoLang的gin颁布
+数据库文档在doc目录下
+部署文档之后补充
